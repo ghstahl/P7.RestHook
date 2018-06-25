@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UnitTest.RestHookStore
+namespace UnitTest.RestHookStore.Core
 {
     static class Unique
     {

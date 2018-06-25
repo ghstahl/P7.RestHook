@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using P7.RestHook.Models;
 using P7.RestHook.Store;
 using Shouldly;
 
-namespace UnitTest.RestHookStore.Stores
+namespace UnitTest.RestHookStore.Core.Stores
 {
     public abstract class UnitTestRestHookStore
     {

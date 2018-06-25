@@ -5,7 +5,7 @@ using P7.RestHook.Store;
 namespace UnitTest.RestHookStore.InMemory.Stores
 {
     [TestClass]
-    public class UnitTestRestHookStore: UnitTest.RestHookStore.Stores.UnitTestRestHookStore
+    public class UnitTestRestHookStore: UnitTest.RestHookStore.Core.Stores.UnitTestRestHookStore
     {
         public UnitTestRestHookStore() : base(HostContainer.ServiceProvider.GetService<IRestHookStore>())
         {

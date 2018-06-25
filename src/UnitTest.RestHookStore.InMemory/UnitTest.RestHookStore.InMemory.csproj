@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\P7.RestHook.InMemoryStore\P7.RestHook.InMemoryStore.csproj" />
-    <ProjectReference Include="..\UnitTest.RestHookStore\UnitTest.RestHookStore.csproj" />
+    <ProjectReference Include="..\UnitTest.RestHookStore.Core\UnitTest.RestHookStore.Core.csproj" />
   </ItemGroup>
 
 </Project>
