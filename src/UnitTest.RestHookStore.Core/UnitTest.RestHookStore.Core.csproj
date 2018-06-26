@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\P7.RestHook.ClientManagement\P7.RestHook.ClientManagement.csproj" />
     <ProjectReference Include="..\P7.RestHook\P7.RestHook.csproj" />
   </ItemGroup>
 

@@ -17,16 +17,16 @@ namespace P7.RestHook.InMemoryStore
             _records = new List<HookRecord>();
         }
 
-        public Task<RestHookStoreResult> DropAsync()
+        public Task<RestHookResult> DropAsync()
         {
             lock (Lock)
             {
                 _records = new List<HookRecord>();
-                return Task.FromResult(RestHookStoreResult.SuccessResult);
+                return Task.FromResult(RestHookResult.SuccessResult);
             }
         }
 
-        public Task<RestHookStoreResult> UpsertAsync(HookRecord record)
+        public Task<RestHookResult> UpsertAsync(HookRecord record)
         {
             lock (Lock)
             {
@@ -35,10 +35,10 @@ namespace P7.RestHook.InMemoryStore
                     string.IsNullOrWhiteSpace(record.EventName) ||
                     string.IsNullOrWhiteSpace(record.CallbackUrl))
                 {
-                    return Task.FromResult(new RestHookStoreResult()
+                    return Task.FromResult(new RestHookResult()
                     {
                         Success = false,
-                        Error = new RestHookStoreResultError()
+                        Error = new RestHookResultError()
                         {
                             ErrorCode = 1,
                             Message = "Input argument is bad"
@@ -63,12 +63,12 @@ namespace P7.RestHook.InMemoryStore
                         foundRecord.ValidatedCallbackUrl = false;
                     }
                 }
-                return Task.FromResult(RestHookStoreResult.SuccessResult);
+                return Task.FromResult(RestHookResult.SuccessResult);
             }
         }
   
 
-        public Task<RestHookStoreResult> DeleteAsync(HookRecord record)
+        public Task<RestHookResult> DeleteAsync(HookRecord record)
         {
             lock (Lock)
             {
@@ -77,10 +77,10 @@ namespace P7.RestHook.InMemoryStore
                     (string.IsNullOrWhiteSpace(record.ClientId) &&
                      string.IsNullOrWhiteSpace(record.EventName)))
                 {
-                    return Task.FromResult(new RestHookStoreResult()
+                    return Task.FromResult(new RestHookResult()
                     {
                         Success = false,
-                        Error = new RestHookStoreResultError()
+                        Error = new RestHookResultError()
                         {
                             ErrorCode = 1,
                             Message = "Input argument is bad"
@@ -107,7 +107,7 @@ namespace P7.RestHook.InMemoryStore
                     }
                 }
 
-                return Task.FromResult(RestHookStoreResult.SuccessResult);
+                return Task.FromResult(RestHookResult.SuccessResult);
             }
         }
 

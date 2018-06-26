@@ -11,13 +11,13 @@ namespace P7.RestHook.Store
         /// Drops the database
         /// </summary>
         /// <returns></returns>
-        Task<RestHookStoreResult> DropAsync();
+        Task<RestHookResult> DropAsync();
         /// <summary>
         /// Insert or Update a hook
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        Task<RestHookStoreResult> UpsertAsync(HookRecord record);
+        Task<RestHookResult> UpsertAsync(HookRecord record);
 
         /// <summary>
         /// Deletes a hook record based upon the inputs.
@@ -25,7 +25,7 @@ namespace P7.RestHook.Store
         /// </summary>
         /// <param name="record"></param>
         /// <returns></returns>
-        Task<RestHookStoreResult> DeleteAsync(HookRecord record);
+        Task<RestHookResult> DeleteAsync(HookRecord record);
 
         /// <summary>
         /// Pages all HookRecords

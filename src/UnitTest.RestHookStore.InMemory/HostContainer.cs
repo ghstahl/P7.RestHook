@@ -19,7 +19,7 @@ namespace UnitTest.RestHookStore.InMemory
                     var serviceCollection = new ServiceCollection()
                         .AddLogging();
 
-                    serviceCollection.AddRestHook();
+                    serviceCollection.AddInMemoryRestHook();
                     _serviceProvider = serviceCollection.BuildServiceProvider();
                 }
 
