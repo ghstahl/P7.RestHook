@@ -18,7 +18,7 @@ before_build:
 - cmd: >-
     dotnet --version
 
-    dotnet restore ./src/P7.RestHook.sln --verbosity m
+    dotnet restore ./src/P7.RestHook.sln --verbosity d
 build:
   project: ./src/P7.RestHook.sln
   verbosity: minimal
