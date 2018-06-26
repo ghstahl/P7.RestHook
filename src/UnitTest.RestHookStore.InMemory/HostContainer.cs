@@ -1,6 +1,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using P7.RestHook.InMemoryStore;
+using P7.RestHook.InMemoryStore.Extensions;
 using P7.RestHook.Store;
 
 namespace UnitTest.RestHookStore.InMemory
@@ -18,7 +19,7 @@ namespace UnitTest.RestHookStore.InMemory
                     var serviceCollection = new ServiceCollection()
                         .AddLogging();
 
-                    serviceCollection.AddSingleton<IRestHookStore, InMemoryRestHookStore>();
+                    serviceCollection.AddRestHook();
                     _serviceProvider = serviceCollection.BuildServiceProvider();
                 }
 
