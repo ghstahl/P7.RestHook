@@ -1,7 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageLicenseUrl>https://github.com/ghstahl/P7.RestHook/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/ghstahl/P7.RestHook</PackageProjectUrl>
+    <PackageTags>RestHook</PackageTags>
+    <Authors>ghstahl</Authors>
+    <Company />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Copyright>Copyright ghstahl 2018</Copyright>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\P7.RestHook.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\P7.RestHook.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

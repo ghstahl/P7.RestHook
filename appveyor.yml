@@ -1,4 +1,4 @@
-version: 1.0.0-alpha-{build}
+version: 1.0.0-nightly-{build}
 image: Visual Studio 2017
 configuration: Release
 init:
@@ -22,11 +22,8 @@ before_build:
 build:
   project: ./src/P7.RestHook.sln
   verbosity: minimal
-after_build:
-- cmd: dotnet pack /p:PackageVersion=%appveyor_build_version% ./src/P7.RestHook.sln
-artifacts:
-- path: '**\P7.RestHook.*.nupkg'
-  name: P7.RestHook
+  publish_nuget: true
+
   
 #deploy:
 #- provider: NuGet
