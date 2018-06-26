@@ -96,7 +96,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         {
             await _restHookStore.DropAsync();
             var clientId = Unique.S;
-
+            var count = 0;
             for (int i = 0; i < 10; ++i)
             {
                 var rc = UniqueHookRecord;
@@ -104,6 +104,7 @@ namespace UnitTest.RestHookStore.Core.Stores
                 var resultF = await _restHookStore.UpsertAsync(rc);
                 resultF.ShouldNotBeNull();
                 resultF.Success.ShouldBeTrue();
+                ++count;
             }
             // Throw in some random ones as well.
             for (int i = 0; i < 10; ++i)
@@ -112,13 +113,14 @@ namespace UnitTest.RestHookStore.Core.Stores
                 var resultF = await _restHookStore.UpsertAsync(rc);
                 resultF.ShouldNotBeNull();
                 resultF.Success.ShouldBeTrue();
+                ++count;
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
             page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(20);
+            page.Count.ShouldBe(count);
 
-            var record = new HookRecord()
+            var record = new HookRecordQuery()
             {
                 ClientId = clientId
             };
@@ -137,7 +139,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         {
             await _restHookStore.DropAsync();
             var eventName = Unique.S;
-
+            var count = 0;
             for (int i = 0; i < 10; ++i)
             {
                 var rc = UniqueHookRecord;
@@ -145,6 +147,7 @@ namespace UnitTest.RestHookStore.Core.Stores
                 var resultF = await _restHookStore.UpsertAsync(rc);
                 resultF.ShouldNotBeNull();
                 resultF.Success.ShouldBeTrue();
+                ++count;
             }
             // Throw in some random ones as well.
             for (int i = 0; i < 10; ++i)
@@ -153,13 +156,14 @@ namespace UnitTest.RestHookStore.Core.Stores
                 var resultF = await _restHookStore.UpsertAsync(rc);
                 resultF.ShouldNotBeNull();
                 resultF.Success.ShouldBeTrue();
+                ++count;
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
             page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(20);
+            page.Count.ShouldBe(count);
 
-            var record = new HookRecord()
+            var record = new HookRecordQuery()
             {
                 EventName = eventName
             };
@@ -169,6 +173,59 @@ namespace UnitTest.RestHookStore.Core.Stores
             page.ShouldNotBeNull();
             page.CurrentPagingState.ShouldBeNull();
             page.Count.ShouldBe(10);
+
+
+        }
+
+        [TestMethod]
+        public async Task Upsert_Many_SameClient_onepage_Success()
+        {
+            await _restHookStore.DropAsync();
+            var clientId = Unique.S;
+            var eventName = Unique.S;
+            var rc = UniqueHookRecord;
+            rc.ClientId = clientId;
+            rc.EventName = eventName;
+            var resultF = await _restHookStore.UpsertAsync(rc);
+            resultF.ShouldNotBeNull();
+            resultF.Success.ShouldBeTrue();
+
+            var count = 1;
+
+            for (int i = 0; i < 10; ++i)
+            {
+                rc = UniqueHookRecord;
+                rc.ClientId = clientId;
+                resultF = await _restHookStore.UpsertAsync(rc);
+                resultF.ShouldNotBeNull();
+                resultF.Success.ShouldBeTrue();
+                ++count;
+            }
+            // Throw in some random ones as well.
+            for (int i = 0; i < 10; ++i)
+            {
+                rc = UniqueHookRecord;
+                resultF = await _restHookStore.UpsertAsync(rc);
+                resultF.ShouldNotBeNull();
+                resultF.Success.ShouldBeTrue();
+                ++count;
+            }
+            var page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(count);
+
+            var record = new HookRecordQuery()
+            {
+                ClientId = clientId,
+                EventName = eventName
+            };
+
+
+            page = await _restHookStore.PageAsync(record, 100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(1);
 
 
         }

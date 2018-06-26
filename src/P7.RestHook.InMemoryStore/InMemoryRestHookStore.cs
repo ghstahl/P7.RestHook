@@ -137,7 +137,7 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public async Task<IPage<HookRecord>> PageAsync(HookRecord hookRecordQuery, int pageSize, byte[] pagingState)
+        public async Task<IPage<HookRecord>> PageAsync(HookRecordQuery hookRecordQuery, int pageSize, byte[] pagingState)
         {
             lock (Lock)
             {

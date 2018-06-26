@@ -43,7 +43,7 @@ namespace P7.RestHook.Store
         /// <param name="pageSize"></param>
         /// <param name="pagingState"></param>
         /// <returns>A Page Record</returns>
-        Task<IPage<HookRecord>> PageAsync(HookRecord hookRecordQuery,int pageSize,
+        Task<IPage<HookRecord>> PageAsync(HookRecordQuery hookRecordQuery,int pageSize,
             byte[] pagingState);
 
     }
