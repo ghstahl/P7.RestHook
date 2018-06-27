@@ -11,7 +11,15 @@ namespace P7.RestHook.InMemoryStore.Extensions
     {
         public static void AddInMemoryRestHook(this IServiceCollection services)
         {
+            services.AddInMemoryRestHookOperationalStore();
+            services.AddInMemoryRestHookUserClientManagementStore();
+        }
+        public static void AddInMemoryRestHookOperationalStore(this IServiceCollection services)
+        {
             services.AddSingleton<IRestHookStore, InMemoryRestHookStore>();
+        }
+        public static void AddInMemoryRestHookUserClientManagementStore(this IServiceCollection services)
+        {
             services.AddSingleton<IRestHookClientManagementStore, InMemoryRestHookClientManagementStore>();
         }
     }
