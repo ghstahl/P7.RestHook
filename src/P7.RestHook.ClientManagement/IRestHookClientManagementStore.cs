@@ -22,6 +22,13 @@ namespace P7.RestHook.ClientManagement
         Task<HookUserClientsRecord> CreateHookUserClientAsync(string userId);
 
         /// <summary>
+        /// Deletes a new hook client user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<RestHookResult> DeleteHookUserClientAsync(string userId);
+
+        /// <summary>
         /// Adds a new clientid to a record
         /// </summary>
         /// <param name="hookUserClientsRecord"></param>
