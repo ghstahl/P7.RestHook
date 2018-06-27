@@ -34,7 +34,8 @@ namespace P7.RestHook.ClientManagement
         /// <param name="hookUserClientsRecord"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        Task<RestHookResult> AddClientAsync(HookUserClientsRecord hookUserClientsRecord, string clientId);
+        Task<RestHookResult> AddClientAsync(HookUserClientsRecord hookUserClientsRecord,
+            ClientRecord clientRecord);
         /// <summary>
         /// updates a record in permenant storage
         /// </summary>

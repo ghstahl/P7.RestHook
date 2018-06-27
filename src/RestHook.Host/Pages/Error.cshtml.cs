@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RestHook.Host.Pages
+namespace RestHookHost.Pages
 {
     public class ErrorModel : PageModel
     {

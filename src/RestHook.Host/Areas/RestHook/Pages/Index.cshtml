@@ -1,4 +1,22 @@
 ﻿@page
-@model RestHook.Host.Areas.RestHook.Pages.IndexModel
+@model RestHookHost.Areas.RestHook.Pages.IndexModel
 @{
 }
+<div class="container-fluid">
+    <div class="row">
+        <h3>Clients</h3>
+        <div class="sidebar3 col-sm-3 ">
+            
+            <div class="list-group">
+                <a href="/RestHook/NewClient" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Client</h5>
+                    </div>
+                    
+                </a>
+                @await Component.InvokeAsync("Clients")
+            </div>
+        </div>
+
+    </div>
+</div>

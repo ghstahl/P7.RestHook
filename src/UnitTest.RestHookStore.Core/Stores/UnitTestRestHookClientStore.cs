@@ -17,7 +17,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         private static HookUserClientsRecord UniqueHookUserClientsRecord => new HookUserClientsRecord
         {
             UserId = Unique.S,
-           Clients = new List<string>()
+           Clients = new List<ClientRecord>()
         };
 
         public UnitTestRestHookClientStore(IRestHookClientManagementStore restHookClientManagementStore)
@@ -91,7 +91,7 @@ namespace UnitTest.RestHookStore.Core.Stores
             result.Success.ShouldBeTrue();
 
             // still try to use it and update it
-            result = await _restHookClientManagementStore.AddClientAsync(record, Unique.S);
+            result = await _restHookClientManagementStore.AddClientAsync(record, Unique.ClientRecord);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
 
@@ -107,10 +107,11 @@ namespace UnitTest.RestHookStore.Core.Stores
             var record = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
             record.ShouldNotBeNull();
 
-            var clientId = Unique.S;
+
+            var clientRecord = Unique.ClientRecord;
 
             // still try to use it and update it
-            var result = await _restHookClientManagementStore.AddClientAsync(record, clientId);
+            var result = await _restHookClientManagementStore.AddClientAsync(record, clientRecord);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
 
@@ -123,10 +124,23 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             persitantRecord.Clients.Count.ShouldBe(record.Clients.Count);
 
-            var culledClients =
-                (persitantRecord.Clients.Where(t2 => !record.Clients.Any(t1 => t2.Contains(t1)))).ToList();
+            var culledClients = (persitantRecord.Clients.Except(record.Clients, new ClientRecordEqualityCompare())).ToList();
             culledClients.Count.ShouldBe(0);
+           
 
+        }
+    }
+
+    class ClientRecordEqualityCompare : IEqualityComparer<ClientRecord>
+    {
+        public bool Equals(ClientRecord x, ClientRecord y)
+        {
+            return x.ClientId == y.ClientId;
+        }
+
+        public int GetHashCode(ClientRecord obj)
+        {
+            return obj.ClientId.GetHashCode();
         }
     }
 }

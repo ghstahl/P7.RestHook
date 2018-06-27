@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RestHook.Host.Pages
+namespace RestHookHost.Pages
 {
     [AllowAnonymous]
     public class IndexModel : PageModel

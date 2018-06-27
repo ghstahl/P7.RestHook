@@ -12,12 +12,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using RestHook.Host.Data;
+using RestHookHost.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using P7.RestHook.InMemoryStore.Extensions;
 
-namespace RestHook.Host
+
+namespace RestHookHost
 {
     public class Startup
     {

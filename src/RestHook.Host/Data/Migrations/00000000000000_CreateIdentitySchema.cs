@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace RestHook.Host.Data.Migrations
+namespace RestHookHost.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

@@ -33,7 +33,7 @@ namespace P7.RestHook.InMemoryStore
                 var record = new HookUserClientsRecord()
                 {
                     UserId = userId,
-                    Clients = new List<string>()
+                    Clients = new List<ClientRecord>()
                 };
                 _records.Add(record);
                 return Task.FromResult(record);
@@ -49,15 +49,16 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public Task<RestHookResult> AddClientAsync(HookUserClientsRecord hookUserClientsRecord, 
-            string clientId)
+        public Task<RestHookResult> AddClientAsync(
+            HookUserClientsRecord hookUserClientsRecord,
+            ClientRecord clientRecord)
         {
             lock (Lock)
             {
-                var cl = hookUserClientsRecord.Clients.FirstOrDefault(item => item == clientId);
+                var cl = hookUserClientsRecord.Clients.FirstOrDefault(item => item.ClientId == clientRecord.ClientId);
                 if (cl == null)
                 {
-                    hookUserClientsRecord.Clients.Add(clientId);
+                    hookUserClientsRecord.Clients.Add(clientRecord);
                 }
 
                 return Task.FromResult(RestHookResult.SuccessResult);
