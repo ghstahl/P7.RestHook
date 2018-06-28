@@ -1,0 +1,83 @@
+﻿@page  "{clientId}"
+@model EditClientModel
+@{
+}
+<div class="row">
+    <div class="col-md-4">
+        <form id="x-form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Create a new Client.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <div class="form-group">
+                <div>
+                    <span>Username:</span>
+                    <a href="#" id="username" data-type="text" data-placement="right" data-title="Enter username">superuser</a>
+                </div>
+
+                <div>
+                    <span>Status:</span>
+                    <a href="#" id="status"></a>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Register</button>
+        </form>
+        <button id="enable" class="btn btn-default">enable / disable</button>
+    </div>
+</div>
+
+@section Style_Head
+    {
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+}
+@section Scripts
+    {
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#enable').click(function() {
+                $('#x-form .editable').editable('toggleDisabled');
+            }); 
+
+            var clientId = '@Model.ClientId';
+            var postUrl = `/RestHook/EditClient/${clientId}`; 
+            var paramsFunc = function(params) {
+                params["__RequestVerificationToken"] = $('[name="__RequestVerificationToken"]').val();
+                return params;
+            }
+
+            //toggle `popup` / `inline` mode
+            $.fn.editable.defaults.mode = 'inline';
+
+            //make username editable
+            $('#username').editable({
+                type: 'text',
+                title: 'Enter username',
+                pk: 1,
+                url: postUrl,
+                params: paramsFunc
+            });
+          
+
+
+            //make status editable
+            $('#status').editable({
+                type: 'select',
+                title: 'Select status',
+                placement: 'right',
+                value: 2,
+                source: [
+                    { value: 1, text: 'status 1' },
+                    { value: 2, text: 'status 2' },
+                    { value: 3, text: 'status 3' }
+                ],
+                pk: 2,
+                url: postUrl,
+                params: paramsFunc
+
+            });
+        });
+    </script>
+}
