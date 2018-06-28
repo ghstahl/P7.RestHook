@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using P7.RestHook.Models;
 using P7.RestHook.Store;
 
@@ -31,6 +32,7 @@ namespace P7.RestHook.InMemoryStore
             lock (Lock)
             {
                 if (record == null ||
+                    string.IsNullOrWhiteSpace(record.Id) ||
                     string.IsNullOrWhiteSpace(record.ClientId) ||
                     string.IsNullOrWhiteSpace(record.EventName) ||
                     string.IsNullOrWhiteSpace(record.CallbackUrl))
@@ -45,14 +47,15 @@ namespace P7.RestHook.InMemoryStore
                         }
                     });
                 }
-
+             
                 var query = from item in _records
-                    where item.EventName == record.EventName && item.ClientId == record.ClientId
+                    where item.Id == record.Id && item.ClientId == record.ClientId
                     select item;
                 var foundRecord = query.FirstOrDefault();
                 if (foundRecord == null)
                 {
-                    _records.Add(record);
+                    var recordDto = Mapper.Map<HookRecord>(record);
+                    _records.Add(recordDto);
                 }
                 else
                 {
@@ -66,16 +69,12 @@ namespace P7.RestHook.InMemoryStore
                 return Task.FromResult(RestHookResult.SuccessResult);
             }
         }
-  
 
         public Task<RestHookResult> DeleteAsync(HookRecord record)
         {
             lock (Lock)
             {
-                if (record == null
-                    ||
-                    (string.IsNullOrWhiteSpace(record.ClientId) &&
-                     string.IsNullOrWhiteSpace(record.EventName)))
+                if (record == null || string.IsNullOrWhiteSpace(record.ClientId))
                 {
                     return Task.FromResult(new RestHookResult()
                     {
@@ -88,24 +87,26 @@ namespace P7.RestHook.InMemoryStore
                     });
                 }
 
-                if (record.ClientId != null || record.EventName != null)
+
+                if (record.Id != null)
                 {
-                    if (record.ClientId == null && record.EventName != null)
-                    {
-                        _records = _records.Where(x => x.EventName != record.EventName).ToList();
-
-                    }
-                    else if (record.ClientId != null && record.EventName == null)
-                    {
-                        _records = _records.Where(x => x.ClientId != record.ClientId).ToList();
-                    }
-
-                    if (record.ClientId != null && record.EventName != null)
-                    {
-                        _records = _records
-                            .Where(x => (x.ClientId != record.ClientId && x.EventName != record.EventName)).ToList();
-                    }
+                    _records = _records.Where(x => x.Id != record.Id).ToList();
                 }
+                else if (record.ClientId == null && record.EventName != null)
+                {
+                    _records = _records.Where(x => x.EventName != record.EventName).ToList();
+                }
+                else if (record.ClientId != null && record.EventName == null)
+                {
+                    _records = _records.Where(x => x.ClientId != record.ClientId).ToList();
+                }
+                else if (record.ClientId != null && record.EventName != null)
+                {
+                    _records =
+                        (_records.Where(r => !(r.ClientId == record.ClientId && r.EventName == record.EventName)))
+                        .ToList();
+                }
+
 
                 return Task.FromResult(RestHookResult.SuccessResult);
             }

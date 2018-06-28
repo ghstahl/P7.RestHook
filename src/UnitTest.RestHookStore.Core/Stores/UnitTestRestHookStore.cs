@@ -12,7 +12,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
         private static HookRecord UniqueHookRecord => new HookRecord
         {
-            ClientId = Unique.S,
+            Id = Unique.G,
+            ClientId = Unique.G,
             CallbackUrl = Unique.Url,
             EventName = Unique.S,
             ValidatedCallbackUrl = false
@@ -90,7 +91,69 @@ namespace UnitTest.RestHookStore.Core.Stores
             page.CurrentPagingState.ShouldBeNull();
             page.Count.ShouldBe(0);
         }
+        [TestMethod]
+        public async Task Upsert_ManySameEvent_SameClient_Page_Delete_Success()
+        {
+            await _restHookStore.DropAsync();
+            var record = UniqueHookRecord;
+            var result = await _restHookStore.UpsertAsync(record);
+            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
 
+            record.Id = Unique.G;
+            result = await _restHookStore.UpsertAsync(record);
+            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+
+            var page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(2);
+
+            record.Id = null;
+            result = await _restHookStore.DeleteAsync(record);
+            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+
+            page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(0);
+        }
+        [TestMethod]
+        public async Task Upsert_ManySameEvent_Page_Delete_Fail()
+        {
+            await _restHookStore.DropAsync();
+            var eventName = Unique.S;
+            var count = 0;
+            for (int i = 0; i < 10; ++i)
+            {
+                var rc = UniqueHookRecord;
+                rc.EventName = eventName;
+                var resultF = await _restHookStore.UpsertAsync(rc);
+                resultF.ShouldNotBeNull();
+                resultF.Success.ShouldBeTrue();
+                ++count;
+            }
+
+            var page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(count);
+
+
+            var result = await _restHookStore.DeleteAsync(new HookRecord()
+            {
+                EventName = eventName
+            });
+            result.ShouldNotBeNull();
+            result.Success.ShouldBeFalse();
+
+            page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(count);
+        }
         [TestMethod]
         public async Task Upsert_Many_SameClient_Success()
         {
@@ -130,6 +193,52 @@ namespace UnitTest.RestHookStore.Core.Stores
             page.ShouldNotBeNull();
             page.CurrentPagingState.ShouldBeNull();
             page.Count.ShouldBe(10);
+
+
+        }
+        [TestMethod]
+        public async Task Upsert_Many_SameClient_delete_Success()
+        {
+            await _restHookStore.DropAsync();
+            var clientId = Unique.S;
+            var count = 0;
+            for (int i = 0; i < 10; ++i)
+            {
+                var rc = UniqueHookRecord;
+                rc.ClientId = clientId;
+                var resultF = await _restHookStore.UpsertAsync(rc);
+                resultF.ShouldNotBeNull();
+                resultF.Success.ShouldBeTrue();
+                ++count;
+            }
+            // Throw in some random ones as well.
+            for (int i = 0; i < 10; ++i)
+            {
+                var rc = UniqueHookRecord;
+                var resultF = await _restHookStore.UpsertAsync(rc);
+                resultF.ShouldNotBeNull();
+                resultF.Success.ShouldBeTrue();
+                ++count;
+            }
+            var page = await _restHookStore.PageAsync(100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(count);
+
+            var record = new HookRecordQuery()
+            {
+                ClientId = clientId
+            };
+
+            var recordDelete = new HookRecord {ClientId = clientId};
+            var result = await _restHookStore.DeleteAsync(recordDelete);
+            result.ShouldNotBeNull();
+            result.Success.ShouldBeTrue();
+
+            page = await _restHookStore.PageAsync(record, 100, null);
+            page.ShouldNotBeNull();
+            page.CurrentPagingState.ShouldBeNull();
+            page.Count.ShouldBe(0);
 
 
         }

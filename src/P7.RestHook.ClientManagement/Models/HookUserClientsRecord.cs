@@ -13,4 +13,9 @@ namespace P7.RestHook.ClientManagement.Models
         public List<ClientRecord> Clients { get; set; }
         public string UserId { get; set; }
     }
+    public class HookUserClientRecord
+    {
+        public ClientRecord Client { get; set; }
+        public string UserId { get; set; }
+    }
 }

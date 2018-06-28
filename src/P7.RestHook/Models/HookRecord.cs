@@ -5,8 +5,9 @@
         public string ClientId { get; set; }
         public string EventName { get; set; }
     }
-    public class HookRecord
+    public partial class HookRecord
     {
+        public string Id { get; set; }
         public string ClientId { get; set; }
         public string CallbackUrl { get; set; }
         public bool ValidatedCallbackUrl { get; set; }
