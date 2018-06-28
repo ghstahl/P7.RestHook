@@ -2,47 +2,82 @@
 @model EditClientModel
 @{
 }
-<div class="row">
-    <div class="col-md-4">
-        <form id="x-form" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new Client.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
+ 
+    <div class="row">
+        <table id="user" class="table table-bordered table-striped" style="clear: both">
+            <caption>ClientId: @Model.ClientId</caption>
+            <tbody>
+ 
+            <tr>
+                <td width="35%">Description</td>
+                <td width="65%">
+                    <a href="#" id="description" data-type="text" data-value="" data-placement="right" data-title="Description">@Model.ClientId</a>
+                </td>
+            </tr>
+            <tr>
+                <td width="35%">
+                 
+                      Callback Urls
+                </td>
+                <td width="65%">
+                    <table id="callbackUrls" class="table table-bordered table-striped" style="clear: both">
+                        <tfoot>
+                            <tr>
+                                <th><button id="add-empty" class="glyphicon glyphicon-plus" name="Editing" value="Edit"></button></th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            <tr>
+                                <td width="100%">https://www.google.com</td>
+                            </tr>
+                        </tbody>
+                      
+                    </table>
 
-            <div class="form-group">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="col-md-4">
+            <div id="xform" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                 <div>
-                    <span>Username:</span>
-                    <a href="#" id="username" data-type="text" data-placement="right" data-title="Enter username">superuser</a>
-                </div>
-
-                <div>
-                    <span>Status:</span>
-                    <a href="#" id="status"></a>
+                    <span>ClientId:</span>
+                    <div href="#" id="username" data-type="text" data-placement="right" data-title="Enter username">@Model.ClientId</div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-default">Register</button>
-        </form>
-        <button id="enable" class="btn btn-default">enable / disable</button>
+            <button id="enable" class="btn btn-default">enable / disable</button>
+            <button id="add-empty">Add empty field</button>
+            <button id="add-non-empty">Add non-empty field</button>
+        </div>
     </div>
-</div>
 
-@section Style_Head
-    {
-    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
-}
-@section Scripts
-    {
-    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+    @section Style_Head
+        {
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+    }
+    @section Scripts
+        {
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 
-    <script>
+        <script>
         $(document).ready(function () {
 
             $('#enable').click(function() {
-                $('#x-form .editable').editable('toggleDisabled');
-            }); 
+                $('#user .editable').editable('toggleDisabled');
+            });
+            $('#add-empty').click(function(){
+                var i = $('#callbackUrls tbody tr').length,
+                    html = `<tr><td width="100%">  <a href="#" id=field${i} data-type="text" data-value="" data-placement="right" data-title=field${i}>Empty</a></td></tr>`;
+                $('#callbackUrls tbody').append(html);
+            });
 
+            $('#add-non-empty').click(function(){
+                var i = $('#xform a').length,
+                    html = '<div><span>Field ' + i +':</span> <a href="#" data-name="field'+i+'" data-type="text" title="Field '+i+'" class="editable-click">abc</div>';
+                $('#xform').append(html);
+            });
             var clientId = '@Model.ClientId';
-            var postUrl = `/RestHook/EditClient/${clientId}`; 
+            var postUrl = `/RestHook/EditClient/${clientId}`;
             var paramsFunc = function(params) {
                 params["__RequestVerificationToken"] = $('[name="__RequestVerificationToken"]').val();
                 return params;
@@ -52,32 +87,15 @@
             $.fn.editable.defaults.mode = 'inline';
 
             //make username editable
-            $('#username').editable({
-                type: 'text',
-                title: 'Enter username',
+            $('#user').editable({
+                selector: 'a',
                 pk: 1,
                 url: postUrl,
                 params: paramsFunc
             });
-          
 
 
-            //make status editable
-            $('#status').editable({
-                type: 'select',
-                title: 'Select status',
-                placement: 'right',
-                value: 2,
-                source: [
-                    { value: 1, text: 'status 1' },
-                    { value: 2, text: 'status 2' },
-                    { value: 3, text: 'status 3' }
-                ],
-                pk: 2,
-                url: postUrl,
-                params: paramsFunc
 
-            });
         });
-    </script>
-}
+        </script>
+    }

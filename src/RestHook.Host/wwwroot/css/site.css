@@ -35,3 +35,27 @@ body {
         display: none;
     }
 }
+
+.glyphicon.glyphicon-plus {
+    
+    
+    border-radius: 50%;
+    border: 3px transparent black;
+    height: 30px;
+    width: 30px;
+    background: none;
+    transition: color .3s, background .3s;
+    /*box-shadow helps soften the choppy circle*/
+    box-shadow: 0 0 1px #000, inset 0 0 2px #000;
+}
+.glyphicon.glyphicon-plus:hover {
+    background: #000;
+    color: #FFF;
+}
+.glyphicon.glyphicon-plus:focus {
+    border-color: blue;
+    outline: none;
+}
+.glyphicon.glyphicon-plus:active {
+    border-color: red;
+}
