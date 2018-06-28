@@ -1,22 +1,68 @@
-﻿@page
+﻿@page "{clientId?}"
 @model RestHookHost.Areas.RestHook.Pages.IndexModel
-@{
+@section Style_Head
+{
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
 }
 <div class="container-fluid">
     <div class="row">
-        <h3>Clients</h3>
+        
         <div class="sidebar3 col-sm-3 ">
-            
+            <h3>Clients</h3>
             <div class="list-group">
-                <a href="/RestHook/NewClient" class="list-group-item list-group-item-action flex-column align-items-start">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Client</h5>
-                    </div>
-                    
-                </a>
                 @await Component.InvokeAsync("Clients")
             </div>
+            <a href="/RestHook/NewClient" class="btn btn-default">New Client</a>
+       
         </div>
-
+        <div class="main2 col-sm-8 ">
+            <h3>Client</h3>
+            @await Component.InvokeAsync("Client", new {clientId = @Model.ClientId})
+        </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#enable').click(function() {
+                $('#user .editable').editable('toggleDisabled');
+            });
+            $('#add-empty').click(function(){
+                var i = $('#callbackUrls tbody tr').length,
+                    html = `<tr><td width="100%">  <a href="#" id=field${i} data-type="text" data-value="" data-placement="right" data-title=field${i}>Empty</a></td></tr>`;
+                $('#callbackUrls tbody').append(html);
+            });
+
+            $('#add-non-empty').click(function(){
+                var i = $('#xform a').length,
+                    html = '<div><span>Field ' + i +':</span> <a href="#" data-name="field'+i+'" data-type="text" title="Field '+i+'" class="editable-click">abc</div>';
+                $('#xform').append(html);
+            });
+            var clientId = '@Model.ClientId';
+            var postUrl = `/RestHook/EditClient/${clientId}`;
+            var paramsFunc = function(params) {
+                params["__RequestVerificationToken"] = $('[name="__RequestVerificationToken"]').val();
+                return params;
+            }
+
+            //toggle `popup` / `inline` mode
+            $.fn.editable.defaults.mode = 'inline';
+
+            //make username editable
+            $('#user').editable({
+                selector: 'a',
+                pk: 1,
+                url: postUrl,
+                params: paramsFunc
+            });
+
+
+
+        });
+    </script>
+}

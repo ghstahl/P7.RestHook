@@ -18,11 +18,14 @@ namespace RestHookHost.Areas.RestHook.Pages
         {
             _restHookClientManagementStore = restHookClientManagementStore;
         }
-        public async void OnGetAsync()
+        public async void OnGetAsync(string clientId)
         {
             HookUserClientsRecord =
                 await _restHookClientManagementStore.FindHookUserClientAsync(User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
+            ClientId = clientId;
         }
+
+        public string ClientId { get; set; }
     }
 }

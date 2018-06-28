@@ -19,7 +19,7 @@ namespace RestHookHost.ViewComponents
             _restHookClientManagementStore = restHookClientManagementStore;
         }
 
-        public object HookUserClientsRecord { get; private set; }
+        public HookUserClientsRecord HookUserClientsRecord { get; private set; }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {

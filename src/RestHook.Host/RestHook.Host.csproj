@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Areas\RestHook\Pages\Components\Client\default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\RestHook\Pages\Components\Clients\default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
