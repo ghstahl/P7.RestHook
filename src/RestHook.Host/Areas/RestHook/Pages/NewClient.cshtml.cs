@@ -31,7 +31,7 @@ namespace RestHookHost.Areas.RestHook.Pages
         {
             _restHookClientManagementStore = restHookClientManagementStore;
         }
-        public async void OnGetAsync()
+        public async void OnGetAsync(string newClientReturnUrl)
         {
             var clientId = Unique.G;
             Input = new NewClientInputModel()
@@ -39,7 +39,7 @@ namespace RestHookHost.Areas.RestHook.Pages
                 ClientId = clientId,
                 Description = $"Description for {clientId}"
             };
-            ReturnUrl = "/RestHook";
+            ReturnUrl = newClientReturnUrl??"/RestHook";
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -57,7 +57,10 @@ namespace RestHookHost.Areas.RestHook.Pages
                 }
 
                 await _restHookClientManagementStore.AddClientAsync(record, new ClientRecord(){ClientId = Input.ClientId,Description = Input.Description});
-                return LocalRedirect(returnUrl);
+
+                var index = returnUrl.IndexOf("?", StringComparison.Ordinal);
+                var separator = index < 0 ? "?" : "&";
+                return LocalRedirect($"{returnUrl}{separator}clientId={Input.ClientId}");
             } 
             // If we got this far, something failed, redisplay form
             return Page();

@@ -1,5 +1,8 @@
 ﻿@page "{clientId?}"
 @model RestHookHost.Areas.RestHook.Pages.IndexModel
+@{
+    var returnUrl = $"/RestHook";
+}
 @section Style_Head
 {
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
@@ -12,7 +15,7 @@
             <div class="list-group">
                 @await Component.InvokeAsync("Clients")
             </div>
-            <a href="/RestHook/NewClient" class="btn btn-default">New Client</a>
+            <a href="/RestHook/NewClient?newClientReturnUrl=@returnUrl" class="btn btn-default">New Client</a>
        
         </div>
         <div class="main2 col-sm-8 ">
