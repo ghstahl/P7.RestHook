@@ -1,0 +1,52 @@
+﻿
+@model P7.RestHook.ClientManagement.Models.HookUserClientRecord
+
+
+
+@if (Model?.Client?.ClientId != null)
+{
+
+    <div class="row">
+    <table id="user" class="table table-bordered table-striped" style="clear: both">
+     
+        <tbody>
+        <tr>
+            <td width="35%">ClientId</td>
+            <td width="65%">
+                @Model.Client.ClientId
+            </td>
+        </tr>
+        <tr>
+            <td width="35%">Description</td>
+            <td width="65%">
+                <a href="#" id="description" data-type="text" data-value="" 
+                   data-placement="right" data-title="Description">@Model.Client.Description</a>
+            </td>
+        </tr>
+        <tr>
+            <td width="35%">
+                 
+                Callback Urls
+            </td>
+            <td width="65%">
+                <table id="callbackUrls" class="table table-bordered table-striped" style="clear: both">
+                    <tfoot>
+                    <tr>
+                        <th><button id="add-empty" class="glyphicon glyphicon-plus" name="Editing" value="Edit"></button></th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr>
+                        <td width="100%">https://www.google.com</td>
+                    </tr>
+                    </tbody>
+                      
+                </table>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+}
+
