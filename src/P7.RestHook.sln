@@ -16,13 +16,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{64269D2D
 		..\appveyor.yml = ..\appveyor.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.RestHookStore.Core", "UnitTest.RestHookStore.Core\UnitTest.RestHookStore.Core.csproj", "{A002D5C4-2E53-40AE-A6D8-22CE85E96795}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest.RestHookStore.Core", "UnitTest.RestHookStore.Core\UnitTest.RestHookStore.Core.csproj", "{A002D5C4-2E53-40AE-A6D8-22CE85E96795}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{063B3B1A-DE94-4E93-82D2-377D331C2052}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestHook.Host", "RestHook.Host\RestHook.Host.csproj", "{FFF00CD3-7648-4589-B320-47F972D12AD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestHook.Host", "RestHook.Host\RestHook.Host.csproj", "{FFF00CD3-7648-4589-B320-47F972D12AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7.RestHook.ClientManagement", "P7.RestHook.ClientManagement\P7.RestHook.ClientManagement.csproj", "{17503334-8CFF-465B-8F00-2F8E3C3D5176}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.ClientManagement", "P7.RestHook.ClientManagement\P7.RestHook.ClientManagement.csproj", "{17503334-8CFF-465B-8F00-2F8E3C3D5176}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -5,7 +5,9 @@
 
 @if (Model?.Client?.ClientId != null)
 {
-
+    var returnUrl = $"/RestHook?clientId={Model.Client.ClientId}";
+    var hrefAddNewCallbackUrl = $"/RestHook/NewCallbackUrl/{Model.Client.ClientId}?newCallbackUrlReturnUrl={returnUrl}";
+                  
     <div class="row">
     <table id="user" class="table table-bordered table-striped" style="clear: both">
      
@@ -30,11 +32,7 @@
             </td>
             <td width="65%">
                 <table id="callbackUrls" class="table table-bordered table-striped" style="clear: both">
-                    <tfoot>
-                    <tr>
-                        <th><button id="add-empty" class="glyphicon glyphicon-plus" name="Editing" value="Edit"></button></th>
-                    </tr>
-                    </tfoot>
+                    
                     <tbody>
                     <tr>
                         <td width="100%">https://www.google.com</td>
@@ -46,7 +44,9 @@
             </td>
         </tr>
         </tbody>
-    </table>
+        </table>                       
+        <a href="@hrefAddNewCallbackUrl" class="btn btn-default">New Callback Url</a>
+
     </div>
 }
 

@@ -1,0 +1,35 @@
+﻿@page "{newCallbackUrlClientId}/{newCallbackUrlReturnUrl?}"
+@model NewCallbackUrlModel
+@{
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Create a new Client.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Items"></label>
+                <select asp-for="Input.Number" asp-items="Model.Input.Items">
+                    <option value="">Pick one</option>
+                </select>
+                <span asp-validation-for="Input.Items" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.CallbackUrl"></label>
+                <input asp-for="Input.CallbackUrl" class="form-control"/>
+                <span asp-validation-for="Input.CallbackUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ClientId" class="form-control" />
+                <input type="hidden" asp-for="ReturnUrl" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-default">Register</button>
+        </form>
+    </div>
+</div>
+
+
+
