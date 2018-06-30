@@ -20,9 +20,10 @@ namespace RestHookHost.Areas.RestHook.Pages
         }
         public async void OnGetAsync(string clientId)
         {
-            HookUserClientsRecord =
-                await _restHookClientManagementStore.FindHookUserClientAsync(User.Claims
+            var result =
+                await _restHookClientManagementStore.FindHookUserClientsAsync(User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
+            HookUserClientsRecord = result.Data;
             ClientId = clientId;
         }
 

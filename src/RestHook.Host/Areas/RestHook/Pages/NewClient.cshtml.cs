@@ -49,11 +49,13 @@ namespace RestHookHost.Areas.RestHook.Pages
             {
                 var userId = User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value;
-                var record =
-                    await _restHookClientManagementStore.FindHookUserClientAsync(userId);
+                var result =
+                    await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+                var record = result.Data;
                 if (record == null)
                 {
-                    record = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+                    var result2 = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+                    record = result2.Data;
                 }
 
                 await _restHookClientManagementStore.AddClientAsync(record, new ClientRecord(){ClientId = Input.ClientId,Description = Input.Description});

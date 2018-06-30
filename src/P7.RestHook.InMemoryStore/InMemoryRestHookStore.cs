@@ -112,7 +112,7 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public async Task<IPage<HookRecord>> PageAsync(int pageSize, byte[] pagingState)
+        public async Task<RestHookDataResult<IPage<HookRecord>>> PageAsync(int pageSize, byte[] pagingState)
         {
             lock (Lock)
             {
@@ -134,11 +134,11 @@ namespace P7.RestHook.InMemoryStore
                 }
 
                 var page = new Page<HookRecord>(currentPagingState, pagingState, slice);
-                return page;
+                return RestHookDataResult<IPage<HookRecord>>.SuccessResult(page);
             }
         }
 
-        public async Task<IPage<HookRecord>> PageAsync(HookRecordQuery hookRecordQuery, int pageSize, byte[] pagingState)
+        public async Task<RestHookDataResult<IPage<HookRecord>>> PageAsync(HookRecordQuery hookRecordQuery, int pageSize, byte[] pagingState)
         {
             lock (Lock)
             {
@@ -147,7 +147,7 @@ namespace P7.RestHook.InMemoryStore
                     (string.IsNullOrWhiteSpace(hookRecordQuery.ClientId) &&
                      string.IsNullOrWhiteSpace(hookRecordQuery.EventName)))
                 {
-                    return new Page<HookRecord>(null, null, new List<HookRecord>());
+                    return RestHookDataResult<IPage<HookRecord>>.SuccessResult(new Page<HookRecord>(null, null, new List<HookRecord>()));
                 }
 
                 byte[] currentPagingState = pagingState;
@@ -193,7 +193,7 @@ namespace P7.RestHook.InMemoryStore
                 }
 
                 var page = new Page<HookRecord>(currentPagingState, pagingState, slice);
-                return page;
+                return RestHookDataResult<IPage<HookRecord>>.SuccessResult(page);
             }
         }
     }

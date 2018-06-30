@@ -24,9 +24,10 @@ namespace RestHookHost.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(string clientId)
         {
             HookUserClientRecord = null;
-            HookUserClientsRecord = await _restHookClientManagementStore
-                    .FindHookUserClientAsync(_contextAccessor.HttpContext.User.Claims
+            var result = await _restHookClientManagementStore
+                    .FindHookUserClientsAsync(_contextAccessor.HttpContext.User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
+            HookUserClientsRecord = result.Data;
             if (HookUserClientsRecord != null)
             {
                 var clientRecord = HookUserClientsRecord.Clients.FirstOrDefault(x => x.ClientId == clientId);
@@ -42,3 +43,4 @@ namespace RestHookHost.ViewComponents
         }
     }
 }
+ 

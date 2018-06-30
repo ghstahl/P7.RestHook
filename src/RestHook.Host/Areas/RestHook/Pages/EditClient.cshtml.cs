@@ -26,11 +26,11 @@ namespace RestHookHost.Areas.RestHook.Pages
         public async Task<IActionResult> OnPostAsync(string clientId)
         {
             var hookUserClientsRecord =
-                await _restHookClientManagementStore.FindHookUserClientAsync(User.Claims
+                await _restHookClientManagementStore.FindHookUserClientsAsync(User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
 
             var form = Request.Form.ToList();
-            var result = await _restHookClientManagementStore.UpdateAsync(hookUserClientsRecord);
+            var result = await _restHookClientManagementStore.UpdateAsync(hookUserClientsRecord.Data);
 
             List<string> lstString = new List<string>
             {

@@ -23,9 +23,10 @@ namespace RestHookHost.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            HookUserClientsRecord = await _restHookClientManagementStore
-                    .FindHookUserClientAsync(_contextAccessor.HttpContext.User.Claims
+            var result = await _restHookClientManagementStore
+                    .FindHookUserClientsAsync(_contextAccessor.HttpContext.User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
+            HookUserClientsRecord = result.Data;
             return View(HookUserClientsRecord);
         }
     }

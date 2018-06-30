@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using P7.RestHook.Models;
 
 namespace P7.RestHook.ClientManagement.Models
 {
@@ -17,5 +18,6 @@ namespace P7.RestHook.ClientManagement.Models
     {
         public ClientRecord Client { get; set; }
         public string UserId { get; set; }
+        public List<HookRecord> HookRecords { get; set; }
     }
 }

@@ -63,9 +63,9 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
+            page.Data.CurrentPagingState.ShouldBeNull();
 
-            page.Count.ShouldBe(1);
+            page.Data.Count.ShouldBe(1);
         }
 
         [TestMethod]
@@ -79,8 +79,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(1);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(1);
 
             result = await _restHookStore.DeleteAsync(record);
             result.ShouldNotBeNull();
@@ -88,8 +88,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(0);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(0);
         }
         [TestMethod]
         public async Task Upsert_ManySameEvent_SameClient_Page_Delete_Success()
@@ -107,8 +107,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(2);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(2);
 
             record.Id = null;
             result = await _restHookStore.DeleteAsync(record);
@@ -117,8 +117,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(0);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(0);
         }
         [TestMethod]
         public async Task Upsert_ManySameEvent_Page_Delete_Fail()
@@ -138,8 +138,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
 
 
             var result = await _restHookStore.DeleteAsync(new HookRecord()
@@ -151,8 +151,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
         }
         [TestMethod]
         public async Task Upsert_Many_SameClient_Success()
@@ -180,8 +180,8 @@ namespace UnitTest.RestHookStore.Core.Stores
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
 
             var record = new HookRecordQuery()
             {
@@ -191,8 +191,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(record, 100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(10);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(10);
 
 
         }
@@ -222,8 +222,8 @@ namespace UnitTest.RestHookStore.Core.Stores
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
 
             var record = new HookRecordQuery()
             {
@@ -237,8 +237,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(record, 100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(0);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(0);
 
 
         }
@@ -269,8 +269,8 @@ namespace UnitTest.RestHookStore.Core.Stores
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
 
             var record = new HookRecordQuery()
             {
@@ -280,8 +280,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(record, 100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(10);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(10);
 
 
         }
@@ -321,8 +321,8 @@ namespace UnitTest.RestHookStore.Core.Stores
             }
             var page = await _restHookStore.PageAsync(100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(count);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(count);
 
             var record = new HookRecordQuery()
             {
@@ -333,8 +333,8 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page = await _restHookStore.PageAsync(record, 100, null);
             page.ShouldNotBeNull();
-            page.CurrentPagingState.ShouldBeNull();
-            page.Count.ShouldBe(1);
+            page.Data.CurrentPagingState.ShouldBeNull();
+            page.Data.Count.ShouldBe(1);
 
 
         }
