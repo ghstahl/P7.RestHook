@@ -17,7 +17,7 @@ namespace P7.RestHook.InMemoryStore
             Lock = new object();
             _records = new List<HookUserClientsRecord>();
         }
-        public Task<HookUserClientsRecord> FindHookUserClientAsync(string userId)
+        public Task<HookUserClientsRecord> FindHookUserClientsAsync(string userId)
         {
             lock (Lock)
             {
@@ -69,7 +69,7 @@ namespace P7.RestHook.InMemoryStore
         {
             lock (Lock)
             {
-                var original = FindHookUserClientAsync(hookUserClientsRecord.UserId).GetAwaiter().GetResult();
+                var original = FindHookUserClientsAsync(hookUserClientsRecord.UserId).GetAwaiter().GetResult();
                 if (original == null)
                 {
                     return Task.FromResult(new RestHookResult()
@@ -84,6 +84,29 @@ namespace P7.RestHook.InMemoryStore
                 }
 
                 original.Clients = hookUserClientsRecord.Clients;
+                return Task.FromResult(RestHookResult.SuccessResult);
+            }
+        }
+
+ 
+        public Task<RestHookResult> DeleteClientAsync(HookUserClientRecord hookUserClientRecord)
+        {
+            lock (Lock)
+            {
+                var original = FindHookUserClientsAsync(hookUserClientRecord.UserId).GetAwaiter().GetResult();
+                if (original == null)
+                {
+                    return Task.FromResult(new RestHookResult()
+                    {
+                        Success = false,
+                        Error = new RestHookResultError()
+                        {
+                            ErrorCode = 1,
+                            Message = "User record doesn't exist in the database"
+                        }
+                    });
+                }
+                original.Clients = original.Clients.FindAll(x => x.ClientId != hookUserClientRecord.Client.ClientId);
                 return Task.FromResult(RestHookResult.SuccessResult);
             }
         }

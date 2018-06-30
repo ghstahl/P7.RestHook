@@ -12,7 +12,7 @@ namespace P7.RestHook.ClientManagement
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>a hook user client record</returns>
-        Task<HookUserClientsRecord> FindHookUserClientAsync(string userId);
+        Task<HookUserClientsRecord> FindHookUserClientsAsync(string userId);
 
         /// <summary>
         /// Creates a new hook client user
@@ -42,5 +42,12 @@ namespace P7.RestHook.ClientManagement
         /// <param name="hookUserClientsRecord"></param>
         /// <returns></returns>
         Task<RestHookResult> UpdateAsync(HookUserClientsRecord hookUserClientsRecord);
+
+        /// <summary>
+        /// Deletes a client record 
+        /// </summary>
+        /// <param name="hookUserClientRecord"></param>
+        /// <returns></returns>
+        Task<RestHookResult> DeleteClientAsync(HookUserClientRecord hookUserClientRecord);
     }
 }
