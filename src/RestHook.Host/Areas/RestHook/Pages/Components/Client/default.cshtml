@@ -32,11 +32,23 @@
             </td>
             <td width="65%">
                 <table id="callbackUrls" class="table table-bordered table-striped" style="clear: both">
-                    
-                    <tbody>
+                    <thead>
                     <tr>
-                        <td width="100%">https://www.google.com</td>
+                        <th scope="col">Event</th>
+                        <th scope="col">Callback URL</th>
+                        <th scope="col">Validated</th>
                     </tr>
+                    </thead>
+                    <tbody>
+ 
+                    @foreach (var hookRecord in Model.Client.HookRecords)
+                    {
+                    <tr>
+                        <td >@hookRecord.EventName</td>
+                        <td >@hookRecord.CallbackUrl</td>
+                        <td >@hookRecord.ValidatedCallbackUrl</td>
+                    </tr>
+                    }
                     </tbody>
                       
                 </table>

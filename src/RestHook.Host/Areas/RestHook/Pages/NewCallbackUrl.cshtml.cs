@@ -69,7 +69,7 @@ namespace RestHookHost.Areas.RestHook.Pages
                 var foundHookRecord = record.HookRecords.FirstOrDefault(hookRecord =>
                     (hookRecord.EventName == eventName && string.Compare(hookRecord.CallbackUrl, Input.CallbackUrl,
                          StringComparison.OrdinalIgnoreCase) == 0));
-                if (foundHookRecord != null)
+                if (foundHookRecord == null)
                 {
                     var result2 =
                         await _restHookClientManagementStore.AddHookRecordAsync(userId, new HookRecord()
