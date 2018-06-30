@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using P7.RestHook;
 using P7.RestHook.ClientManagement;
 using P7.RestHook.ClientManagement.Models;
+using P7.RestHook.Models;
 
 namespace RestHookHost.Areas.RestHook.Pages
 {
@@ -58,10 +60,27 @@ namespace RestHookHost.Areas.RestHook.Pages
                 var userId = User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value;
 
-                var record =
-                    await _restHookClientManagementStore.FindHookUserClientRecordAsync(userId,ClientId);
+                var result =
+                    await _restHookClientManagementStore.FindClientRecordAsync(userId,ClientId);
+                var record = result.Data;
 
-                
+                // make sure we are not double adding.
+                var eventName = Input.Items[Input.Number-1].Text;
+                var foundHookRecord = record.HookRecords.FirstOrDefault(hookRecord =>
+                    (hookRecord.EventName == eventName && string.Compare(hookRecord.CallbackUrl, Input.CallbackUrl,
+                         StringComparison.OrdinalIgnoreCase) == 0));
+                if (foundHookRecord != null)
+                {
+                    var result2 =
+                        await _restHookClientManagementStore.AddHookRecordAsync(userId, new HookRecord()
+                        {
+                            CallbackUrl = Input.CallbackUrl,
+                            ClientId = ClientId,
+                            EventName = eventName
+                        });
+                }
+
+
 
                 return LocalRedirect($"{returnUrl}");
             }

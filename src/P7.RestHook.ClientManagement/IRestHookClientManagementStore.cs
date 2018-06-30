@@ -21,7 +21,7 @@ namespace P7.RestHook.ClientManagement
         /// <param name="userId"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        Task<RestHookDataResult<HookUserClientRecord>> FindHookUserClientRecordAsync(string userId, string clientId);
+        Task<RestHookDataResult<ClientRecord>> FindClientRecordAsync(string userId, string clientId);
 
         /// <summary>
         /// deletes a hook user client record
@@ -30,9 +30,17 @@ namespace P7.RestHook.ClientManagement
         /// <returns>a hook user client record</returns>
         Task<RestHookResult> DeleteHookUserClientRecordAsync(string userId, string clientId);
 
-        Task<RestHookDataResult<HookRecord>> FindHookRecordsAsync(string userId, string clientId, string hookRecordId);
+        /// <summary>
+        /// Find a HookRecord by id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <param name="hookRecordId"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<HookRecord>> FindHookRecordAsync(string userId, string clientId, string hookRecordId);
 
-        
+        Task<RestHookDataResult<HookRecord>> AddHookRecordAsync(string userId, HookRecord hookRecord);
+
 
         /// <summary>
         /// Creates a new hook client user
@@ -49,13 +57,11 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteHookUserClientAsync(string userId);
 
         /// <summary>
-        /// Adds a new clientid to a record
+        /// creates a new ClientRecord
         /// </summary>
-        /// <param name="hookUserClientsRecord"></param>
-        /// <param name="clientId"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        Task<RestHookResult> AddClientAsync(HookUserClientsRecord hookUserClientsRecord,
-            ClientRecord clientRecord);
+        Task<RestHookDataResult<ClientRecord>> CreateClientAsync(string userId);
         /// <summary>
         /// updates a record in permenant storage
         /// </summary>

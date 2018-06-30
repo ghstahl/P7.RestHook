@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using P7.RestHook.ClientManagement;
@@ -26,26 +27,30 @@ namespace P7.RestHook.InMemoryStore
                 return Task.FromResult(RestHookDataResult<HookUserClientsRecord>.SuccessResult(record));
             }
         }
-
-        public Task<RestHookDataResult<HookUserClientRecord>> FindHookUserClientRecordAsync(string userId, string clientId)
+ 
+        public Task<RestHookDataResult<ClientRecord>> FindClientRecordAsync(string userId, string clientId)
         {
             lock (Lock)
             {
                 var original = FindHookUserClientsAsync(userId).GetAwaiter().GetResult();
                 if (original == null)
                 {
-                    var errorResult = RestHookDataResult<HookUserClientRecord>.FailedResult(new RestHookResultError());
+                    var errorResult = RestHookDataResult<ClientRecord>.FailedResult(new RestHookResultError());
                     return Task.FromResult(errorResult);
                 }
 
                 var record = original.Data;
                 var client = record.Clients.FirstOrDefault(x => x.ClientId == clientId);
-                return Task.FromResult(
-                    RestHookDataResult<HookUserClientRecord>.SuccessResult(new HookUserClientRecord()
+                if (client == null)
+                {
+                    var errorResult = RestHookDataResult<ClientRecord>.FailedResult(new RestHookResultError()
                     {
-                        UserId = userId,
-                        Client = client
-                    }));
+                        Message = $"Client:{clientId} does not exist for user:{userId}"
+                    });
+                    return Task.FromResult(errorResult);
+                }
+               
+                return Task.FromResult(RestHookDataResult<ClientRecord>.SuccessResult(client));
             }
         }
 
@@ -62,7 +67,7 @@ namespace P7.RestHook.InMemoryStore
                         Error = new RestHookResultError()
                         {
                             ErrorCode = 1,
-                            Message = "User record doesn't exist in the database"
+                            Message = $"User:{userId} record doesn't exist in the database"
                         }
                     });
                 }
@@ -73,9 +78,58 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public Task<RestHookDataResult<HookRecord>> FindHookRecordsAsync(string userId, string clientId, string hookRecordId)
+        public Task<RestHookDataResult<HookRecord>> FindHookRecordAsync(string userId, string clientId, string hookRecordId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Task<RestHookDataResult<HookRecord>> AddHookRecordAsync(string userId, HookRecord hookRecord)
+        {
+            var record = _records.FirstOrDefault(item => item.UserId == userId);
+            RestHookDataResult<HookRecord> result = null;
+            if (record == null)
+            {
+                result = RestHookDataResult<HookRecord>.FailedResult(new RestHookResultError()
+                {
+                    Message = $"User:{userId} record doesn't exist in the database"
+                });
+                return Task.FromResult(result);
+
+            }
+            var clientRecord = record.Clients.FirstOrDefault(item => item.ClientId == hookRecord.ClientId);
+            if (clientRecord == null)
+            {
+                result = RestHookDataResult<HookRecord>.FailedResult(new RestHookResultError()
+                {
+                    ErrorCode = 1,
+                    Message = $"{hookRecord.ClientId} does not exist for user:{userId}"
+                });
+                return Task.FromResult(result);
+            }
+
+            var foundHookRecord = clientRecord.HookRecords.FirstOrDefault(hr =>
+                (hr.EventName == hookRecord.EventName && string.Compare(hr.CallbackUrl, hookRecord.CallbackUrl,
+                     StringComparison.OrdinalIgnoreCase) == 0));
+            if (foundHookRecord != null)
+            {
+                result = RestHookDataResult<HookRecord>.FailedResult(new RestHookResultError()
+                {
+                    ErrorCode = 1,
+                    Message = $"{hookRecord.ClientId} already has this record"
+                });
+                return Task.FromResult(result);
+            }
+            var finalHookRecord = new HookRecord()
+            {
+                Id = Unique.G,
+                CallbackUrl = hookRecord.CallbackUrl,
+                ClientId = clientRecord.ClientId,
+                EventName = hookRecord.EventName
+            };
+
+            clientRecord.HookRecords.Add(finalHookRecord);
+            result = RestHookDataResult<HookRecord>.SuccessResult(finalHookRecord);
+            return Task.FromResult(result);
         }
 
         public Task<RestHookDataResult<HookUserClientsRecord>> CreateHookUserClientAsync(string userId)
@@ -102,19 +156,28 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public Task<RestHookResult> AddClientAsync(
-            HookUserClientsRecord hookUserClientsRecord,
-            ClientRecord clientRecord)
+        public Task<RestHookDataResult<ClientRecord>> CreateClientAsync(string userId)
         {
             lock (Lock)
             {
-                var cl = hookUserClientsRecord.Clients.FirstOrDefault(item => item.ClientId == clientRecord.ClientId);
-                if (cl == null)
+                var record = _records.FirstOrDefault(item => item.UserId == userId);
+                RestHookDataResult<ClientRecord> result = null;
+                if (record == null)
                 {
-                    hookUserClientsRecord.Clients.Add(clientRecord);
+                    result = RestHookDataResult<ClientRecord>.FailedResult(new RestHookResultError()
+                    {
+                        Message = $"User:{userId} record doesn't exist in the database"
+                    });
+                    return Task.FromResult(result);
                 }
+                var clientRecord = new ClientRecord()
+                {
+                    ClientId = Unique.G
+                };
+                record.Clients.Add(clientRecord);
 
-                return Task.FromResult(RestHookResult.SuccessResult);
+
+                return Task.FromResult(RestHookDataResult<ClientRecord>.SuccessResult(clientRecord));
             }
         }
 
@@ -131,7 +194,7 @@ namespace P7.RestHook.InMemoryStore
                         Error = new RestHookResultError()
                         {
                             ErrorCode = 1,
-                            Message = "User record doesn't exist in the database"
+                            Message = $"User:{hookUserClientsRecord.UserId} record doesn't exist in the database"
                         }
                     });
                 }

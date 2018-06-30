@@ -67,7 +67,7 @@ namespace UnitTest.RestHookStore.Core.Stores
 
             page.Data.Count.ShouldBe(1);
         }
-
+       
         [TestMethod]
         public async Task Upsert_Page_Delete_Success()
         {

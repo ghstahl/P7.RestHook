@@ -5,8 +5,13 @@ namespace P7.RestHook.ClientManagement.Models
 {
     public class ClientRecord
     {
+        public ClientRecord()
+        {
+            HookRecords = new List<HookRecord>();
+        }
         public string ClientId { get; set; }
         public string Description { get; set; }
+        public List<HookRecord> HookRecords { get; set; }
     }
 
     public class HookUserClientsRecord
@@ -18,6 +23,5 @@ namespace P7.RestHook.ClientManagement.Models
     {
         public ClientRecord Client { get; set; }
         public string UserId { get; set; }
-        public List<HookRecord> HookRecords { get; set; }
     }
 }

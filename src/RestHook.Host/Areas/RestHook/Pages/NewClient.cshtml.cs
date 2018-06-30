@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using P7.RestHook;
 using P7.RestHook.ClientManagement;
 using P7.RestHook.ClientManagement.Models;
 
@@ -58,11 +59,11 @@ namespace RestHookHost.Areas.RestHook.Pages
                     record = result2.Data;
                 }
 
-                await _restHookClientManagementStore.AddClientAsync(record, new ClientRecord(){ClientId = Input.ClientId,Description = Input.Description});
-
+                var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(record.UserId);
+                var clientRecord = clientRecordResult.Data;
                 var index = returnUrl.IndexOf("?", StringComparison.Ordinal);
                 var separator = index < 0 ? "?" : "&";
-                return LocalRedirect($"{returnUrl}{separator}clientId={Input.ClientId}");
+                return LocalRedirect($"{returnUrl}{separator}clientId={clientRecord.ClientId}");
             } 
             // If we got this far, something failed, redisplay form
             return Page();
