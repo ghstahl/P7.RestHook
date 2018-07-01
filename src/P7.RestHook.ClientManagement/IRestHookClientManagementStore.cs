@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using P7.RestHook.ClientManagement.Models;
 using P7.RestHook.Models;
 using P7.RestHook.Store;
@@ -31,15 +32,29 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteHookUserClientRecordAsync(string userId, string clientId);
 
         /// <summary>
-        /// Find a HookRecord by id
+        /// Find a HookRecords by ClientId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<IEnumerable<HookRecord>>> FindHookRecordsAsync(string userId, string clientId);
+
+        /// <summary>
+        /// Adds a HookRecord
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="hookRecord"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<HookRecord>> AddHookRecordAsync(string userId, HookRecord hookRecord);
+
+        /// <summary>
+        /// Deletes a HookRecord
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="clientId"></param>
         /// <param name="hookRecordId"></param>
         /// <returns></returns>
-        Task<RestHookDataResult<HookRecord>> FindHookRecordAsync(string userId, string clientId, string hookRecordId);
-
-        Task<RestHookDataResult<HookRecord>> AddHookRecordAsync(string userId, HookRecord hookRecord);
+        Task<RestHookResult> DeleteHookRecordAsync(string userId, string clientId, string hookRecordId);
 
 
         /// <summary>

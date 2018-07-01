@@ -37,17 +37,22 @@
                         <th scope="col">Event</th>
                         <th scope="col">Callback URL</th>
                         <th scope="col">Validated</th>
+                        <th scope="col">...</th>
                     </tr>
                     </thead>
                     <tbody>
  
                     @foreach (var hookRecord in Model.Client.HookRecords)
                     {
-                    <tr>
-                        <td >@hookRecord.EventName</td>
-                        <td >@hookRecord.CallbackUrl</td>
-                        <td >@hookRecord.ValidatedCallbackUrl</td>
-                    </tr>
+                        <tr>
+                            <td>@hookRecord.EventName</td>
+                            <td>@hookRecord.CallbackUrl</td>
+                            <td>@hookRecord.ValidatedCallbackUrl</td>
+                            <td> <a asp-page="./DeleteCallbackUrl" 
+                                    asp-route-clientId="@hookRecord.ClientId" 
+                                    asp-route-callBackUrlId="@hookRecord.Id">Delete</a></td>
+                           
+                        </tr>
                     }
                     </tbody>
                       

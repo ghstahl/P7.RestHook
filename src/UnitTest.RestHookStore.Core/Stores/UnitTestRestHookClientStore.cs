@@ -72,6 +72,56 @@ namespace UnitTest.RestHookStore.Core.Stores
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
         }
+
+        [TestMethod]
+        public async Task ClientStore_Create_hookrecord_add_delete()
+        {
+            var userId = Unique.S;
+            var result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            result.ShouldNotBeNull();
+            result.Data.ShouldNotBeNull();
+
+            var hookUserClientsRecord = result.Data;
+            var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(userId);
+            clientRecordResult.ShouldNotBeNull();
+            clientRecordResult.Success.ShouldBeTrue();
+            clientRecordResult.Data.ShouldNotBeNull();
+
+            var clientRecord = clientRecordResult.Data;
+            var hookRecord = new HookRecord()
+            {
+                ClientId = clientRecord.ClientId,
+                CallbackUrl = "https://www.somedomain.com",
+                EventName = Unique.S
+            };
+
+            var hookRecordResult = await _restHookClientManagementStore.AddHookRecordAsync(userId, hookRecord);
+            hookRecordResult.ShouldNotBeNull();
+            hookRecordResult.Success.ShouldBeTrue();
+            hookRecordResult.Data.ShouldNotBeNull();
+
+            var hookRecordsResult =
+                await _restHookClientManagementStore.FindHookRecordsAsync(userId, clientRecord.ClientId);
+            hookRecordsResult.ShouldNotBeNull();
+            hookRecordsResult.Success.ShouldBeTrue();
+            hookRecordsResult.Data.ShouldNotBeNull();
+            hookRecordsResult.Data.Count().ShouldBe(1);
+
+            var deleteHookRecordResult =
+                await _restHookClientManagementStore.DeleteHookRecordAsync(userId, clientRecord.ClientId, hookRecordResult.Data.Id);
+            deleteHookRecordResult.ShouldNotBeNull();
+            deleteHookRecordResult.Success.ShouldBeTrue();
+            
+
+            hookRecordsResult =
+                await _restHookClientManagementStore.FindHookRecordsAsync(userId, clientRecord.ClientId);
+            hookRecordsResult.ShouldNotBeNull();
+            hookRecordsResult.Success.ShouldBeTrue();
+            hookRecordsResult.Data.ShouldNotBeNull();
+            hookRecordsResult.Data.Count().ShouldBe(0);
+
+        }
+
         [TestMethod]
         public async Task ClientStore_Create_user_client_hookrecord_Delete()
         {
