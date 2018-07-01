@@ -10,11 +10,24 @@ namespace P7.RestHook.ClientManagement
     public interface IRestHookClientManagementStore
     {
         /// <summary>
+        /// Creates a new hook client user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>a hook user client record</returns>
+        Task<RestHookDataResult<HookUser>> CreateHookUserAsync(string userId);
+
+        /// <summary>
+        /// Deletes a new hook client user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<RestHookResult> DeleteHookUserAsync(string userId);
+        /// <summary>
         /// fetches a hook user client record
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>a hook user client record</returns>
-        Task<RestHookDataResult<HookUserClientsRecord>> FindHookUserClientsAsync(string userId);
+        Task<RestHookDataResult<HookUser>> FindHookUserAsync(string userId);
 
         /// <summary>
         /// Finds a user client record
@@ -22,14 +35,22 @@ namespace P7.RestHook.ClientManagement
         /// <param name="userId"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        Task<RestHookDataResult<ClientRecord>> FindClientRecordAsync(string userId, string clientId);
+        Task<RestHookDataResult<HookClient>> FindHookClientAsync(string userId, string clientId);
+
+        /// <summary>
+        /// creates a new HookClient
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<HookClient>> CreateHookClientAsync(string userId);
 
         /// <summary>
         /// deletes a hook user client record
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns>a hook user client record</returns>
-        Task<RestHookResult> DeleteHookUserClientRecordAsync(string userId, string clientId);
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        Task<RestHookResult> DeleteHookClientAsync(string userId, string clientId);
 
         /// <summary>
         /// Find a HookRecords by ClientId
@@ -57,32 +78,15 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteHookRecordAsync(string userId, string clientId, string hookRecordId);
 
 
-        /// <summary>
-        /// Creates a new hook client user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>a hook user client record</returns>
-        Task<RestHookDataResult<HookUserClientsRecord>> CreateHookUserClientAsync(string userId);
+        
 
-        /// <summary>
-        /// Deletes a new hook client user
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<RestHookResult> DeleteHookUserClientAsync(string userId);
 
-        /// <summary>
-        /// creates a new ClientRecord
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<RestHookDataResult<ClientRecord>> CreateClientAsync(string userId);
         /// <summary>
         /// updates a record in permenant storage
         /// </summary>
         /// <param name="hookUserClientsRecord"></param>
         /// <returns></returns>
-        Task<RestHookResult> UpdateAsync(HookUserClientsRecord hookUserClientsRecord);
+        Task<RestHookResult> UpdateAsync(HookUser hookUserClientsRecord);
  
     }
 }

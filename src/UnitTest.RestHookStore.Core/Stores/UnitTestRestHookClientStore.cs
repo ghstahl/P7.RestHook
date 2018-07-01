@@ -14,10 +14,10 @@ namespace UnitTest.RestHookStore.Core.Stores
     {
         private IRestHookClientManagementStore _restHookClientManagementStore;
 
-        private static HookUserClientsRecord UniqueHookUserClientsRecord => new HookUserClientsRecord
+        private static HookUser UniqueHookUserClientsRecord => new HookUser
         {
             UserId = Unique.S,
-           Clients = new List<ClientRecord>()
+           Clients = new List<HookClient>()
         };
 
         public UnitTestRestHookClientStore(IRestHookClientManagementStore restHookClientManagementStore)
@@ -33,7 +33,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task ClientStore_Not_Found()
         {
-            var result = await _restHookClientManagementStore.FindHookUserClientsAsync(Unique.S);
+            var result = await _restHookClientManagementStore.FindHookUserAsync(Unique.S);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
             result.Data.ShouldBeNull();
@@ -42,12 +42,12 @@ namespace UnitTest.RestHookStore.Core.Stores
         public async Task ClientStore_Not_Found_Create()
         {
             var userId = Unique.S;
-            var result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
             result.Data.ShouldBeNull();
 
-            result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            result = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
             result.Data.ShouldNotBeNull();
@@ -56,19 +56,19 @@ namespace UnitTest.RestHookStore.Core.Stores
         public async Task ClientStore_Create_Delete()
         {
             var userId = Unique.S;
-            var result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
 
-            result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            result = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldNotBeNull();
 
-            var result2 = await _restHookClientManagementStore.DeleteHookUserClientAsync(userId);
+            var result2 = await _restHookClientManagementStore.DeleteHookUserAsync(userId);
             result2.ShouldNotBeNull();
             result2.Success.ShouldBeTrue();
 
-            result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
         }
@@ -77,12 +77,12 @@ namespace UnitTest.RestHookStore.Core.Stores
         public async Task ClientStore_Create_hookrecord_add_delete()
         {
             var userId = Unique.S;
-            var result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            var result = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldNotBeNull();
 
             var hookUserClientsRecord = result.Data;
-            var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(userId);
+            var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(userId);
             clientRecordResult.ShouldNotBeNull();
             clientRecordResult.Success.ShouldBeTrue();
             clientRecordResult.Data.ShouldNotBeNull();
@@ -126,16 +126,16 @@ namespace UnitTest.RestHookStore.Core.Stores
         public async Task ClientStore_Create_user_client_hookrecord_Delete()
         {
             var userId = Unique.S;
-            var result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
 
-            result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            result = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldNotBeNull();
 
             var hookUserClientsRecord = result.Data;
-            var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(userId);
+            var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(userId);
             clientRecordResult.ShouldNotBeNull();
             clientRecordResult.Success.ShouldBeTrue();
             clientRecordResult.Data.ShouldNotBeNull();
@@ -158,18 +158,18 @@ namespace UnitTest.RestHookStore.Core.Stores
             finalHookRecord.CallbackUrl.ShouldBe(hookRecord.CallbackUrl);
             finalHookRecord.EventName.ShouldBe(hookRecord.EventName);
 
-            result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldNotBeNull();
-            var HookUserClientsRecord = result.Data;
-            HookUserClientsRecord.Clients.Count.ShouldBe(1);
+            var HookUser = result.Data;
+            HookUser.Clients.Count.ShouldBe(1);
                 
  
-            var result2 = await _restHookClientManagementStore.DeleteHookUserClientAsync(userId);
+            var result2 = await _restHookClientManagementStore.DeleteHookUserAsync(userId);
             result2.ShouldNotBeNull();
             result2.Success.ShouldBeTrue();
 
-            result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
         }
@@ -177,15 +177,15 @@ namespace UnitTest.RestHookStore.Core.Stores
         public async Task ClientStore_Delete_nonexistant_user()
         {
             var userId = Unique.S;
-            var result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
 
-            var result2 = await _restHookClientManagementStore.DeleteHookUserClientAsync(userId);
+            var result2 = await _restHookClientManagementStore.DeleteHookUserAsync(userId);
             result2.ShouldNotBeNull();
             result2.Success.ShouldBeTrue();
 
-            result = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            result = await _restHookClientManagementStore.FindHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Data.ShouldBeNull();
         }
@@ -194,7 +194,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         {
             var userId = Unique.S;
             // create recrod
-            var result = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            var result = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
             result.Data.ShouldNotBeNull();
@@ -202,12 +202,12 @@ namespace UnitTest.RestHookStore.Core.Stores
             var hookUserClientsRecord = result.Data;
 
             // delete it
-            var result2 = await _restHookClientManagementStore.DeleteHookUserClientAsync(userId);
+            var result2 = await _restHookClientManagementStore.DeleteHookUserAsync(userId);
             result2.ShouldNotBeNull();
             result2.Success.ShouldBeTrue();
 
             // still try to use it and update it
-            var createClientResult = await _restHookClientManagementStore.CreateClientAsync(hookUserClientsRecord.UserId);
+            var createClientResult = await _restHookClientManagementStore.CreateHookClientAsync(hookUserClientsRecord.UserId);
             createClientResult.ShouldNotBeNull();
             createClientResult.Success.ShouldBeFalse();
 
@@ -220,14 +220,14 @@ namespace UnitTest.RestHookStore.Core.Stores
         {
             var userId = Unique.S;
             // create recrod
-            var record = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            var record = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             record.ShouldNotBeNull();
 
 
           
 
             // still try to use it and update it
-            var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(record.Data.UserId);
+            var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(record.Data.UserId);
             clientRecordResult.ShouldNotBeNull();
             clientRecordResult.Success.ShouldBeTrue();
 
@@ -237,7 +237,7 @@ namespace UnitTest.RestHookStore.Core.Stores
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
 
-            var persitantRecord = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var persitantRecord = await _restHookClientManagementStore.FindHookUserAsync(userId);
             persitantRecord.ShouldNotBeNull();
 
             persitantRecord.Data.Clients.Count.ShouldBe(record.Data.Clients.Count);
@@ -251,18 +251,18 @@ namespace UnitTest.RestHookStore.Core.Stores
         {
             var userId = Unique.S;
             // create recrod
-            var record = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+            var record = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             record.ShouldNotBeNull();
 
 
             // still try to use it and update it
-            var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(record.Data.UserId);
+            var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(record.Data.UserId);
             clientRecordResult.ShouldNotBeNull();
             clientRecordResult.Success.ShouldBeTrue();
             var clientRecord = clientRecordResult.Data;
 
 
-            var persitantRecord = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            var persitantRecord = await _restHookClientManagementStore.FindHookUserAsync(userId);
             persitantRecord.ShouldNotBeNull();
 
             persitantRecord.Data.Clients.Count.ShouldBe(record.Data.Clients.Count);
@@ -273,31 +273,31 @@ namespace UnitTest.RestHookStore.Core.Stores
             var client = persitantRecord.Data.Clients[0];
 
             var foundClient =
-                await _restHookClientManagementStore.FindClientRecordAsync(userId, client.ClientId);
+                await _restHookClientManagementStore.FindHookClientAsync(userId, client.ClientId);
             foundClient.ShouldNotBeNull();
            
             foundClient.Data.ClientId.ShouldBe(client.ClientId);
             foundClient.Data.Description.ShouldBe(client.Description);
 
 
-            var result = await _restHookClientManagementStore.DeleteHookUserClientRecordAsync(userId, persitantRecord.Data.Clients[0].ClientId);
+            var result = await _restHookClientManagementStore.DeleteHookClientAsync(userId, persitantRecord.Data.Clients[0].ClientId);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
 
-            persitantRecord = await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+            persitantRecord = await _restHookClientManagementStore.FindHookUserAsync(userId);
             persitantRecord.ShouldNotBeNull();
             persitantRecord.Data.Clients.Count.ShouldBe(0);
         }
     }
 
-    class ClientRecordEqualityCompare : IEqualityComparer<ClientRecord>
+    class ClientRecordEqualityCompare : IEqualityComparer<HookClient>
     {
-        public bool Equals(ClientRecord x, ClientRecord y)
+        public bool Equals(HookClient x, HookClient y)
         {
             return x.ClientId == y.ClientId;
         }
 
-        public int GetHashCode(ClientRecord obj)
+        public int GetHashCode(HookClient obj)
         {
             return obj.ClientId.GetHashCode();
         }

@@ -61,7 +61,7 @@ namespace RestHookHost.Areas.RestHook.Pages
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value;
 
                 var result =
-                    await _restHookClientManagementStore.FindClientRecordAsync(userId,ClientId);
+                    await _restHookClientManagementStore.FindHookClientAsync(userId,ClientId);
                 var record = result.Data;
 
                 // make sure we are not double adding.

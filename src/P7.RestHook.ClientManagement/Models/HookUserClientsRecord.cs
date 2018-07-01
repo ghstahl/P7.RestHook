@@ -3,9 +3,9 @@ using P7.RestHook.Models;
 
 namespace P7.RestHook.ClientManagement.Models
 {
-    public class ClientRecord
+    public class HookClient
     {
-        public ClientRecord()
+        public HookClient()
         {
             HookRecords = new List<HookRecord>();
         }
@@ -14,14 +14,14 @@ namespace P7.RestHook.ClientManagement.Models
         public List<HookRecord> HookRecords { get; set; }
     }
 
-    public class HookUserClientsRecord
+    public class HookUser
     {
-        public List<ClientRecord> Clients { get; set; }
+        public List<HookClient> Clients { get; set; }
         public string UserId { get; set; }
     }
     public class HookUserClientRecord
     {
-        public ClientRecord Client { get; set; }
+        public HookClient Client { get; set; }
         public string UserId { get; set; }
     }
 }

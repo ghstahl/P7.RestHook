@@ -51,15 +51,15 @@ namespace RestHookHost.Areas.RestHook.Pages
                 var userId = User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value;
                 var result =
-                    await _restHookClientManagementStore.FindHookUserClientsAsync(userId);
+                    await _restHookClientManagementStore.FindHookUserAsync(userId);
                 var record = result.Data;
                 if (record == null)
                 {
-                    var result2 = await _restHookClientManagementStore.CreateHookUserClientAsync(userId);
+                    var result2 = await _restHookClientManagementStore.CreateHookUserAsync(userId);
                     record = result2.Data;
                 }
 
-                var clientRecordResult = await _restHookClientManagementStore.CreateClientAsync(record.UserId);
+                var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(record.UserId);
                 var clientRecord = clientRecordResult.Data;
                 var index = returnUrl.IndexOf("?", StringComparison.Ordinal);
                 var separator = index < 0 ? "?" : "&";

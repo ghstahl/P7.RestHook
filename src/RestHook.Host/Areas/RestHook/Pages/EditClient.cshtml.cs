@@ -26,7 +26,7 @@ namespace RestHookHost.Areas.RestHook.Pages
         public async Task<IActionResult> OnPostAsync(string clientId)
         {
             var hookUserClientsRecord =
-                await _restHookClientManagementStore.FindHookUserClientsAsync(User.Claims
+                await _restHookClientManagementStore.FindHookUserAsync(User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
 
             var form = Request.Form.ToList();
