@@ -30,7 +30,7 @@ namespace RestHookHost.Areas.RestHook.Pages
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
 
             var form = Request.Form.ToList();
-            var result = await _restHookClientManagementStore.UpdateAsync(hookUserClientsRecord.Data);
+     //       var result = await _restHookClientManagementStore.UpdateAsync(hookUserClientsRecord.Data);
 
             List<string> lstString = new List<string>
             {

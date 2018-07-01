@@ -76,17 +76,6 @@ namespace P7.RestHook.ClientManagement
         /// <param name="hookRecordId"></param>
         /// <returns></returns>
         Task<RestHookResult> DeleteHookRecordAsync(string userId, string clientId, string hookRecordId);
-
-
-        
-
-
-        /// <summary>
-        /// updates a record in permenant storage
-        /// </summary>
-        /// <param name="hookUserClientsRecord"></param>
-        /// <returns></returns>
-        Task<RestHookResult> UpdateAsync(HookUser hookUserClientsRecord);
  
     }
 }

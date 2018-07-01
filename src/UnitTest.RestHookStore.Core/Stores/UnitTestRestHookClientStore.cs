@@ -209,11 +209,7 @@ namespace UnitTest.RestHookStore.Core.Stores
             // still try to use it and update it
             var createClientResult = await _restHookClientManagementStore.CreateHookClientAsync(hookUserClientsRecord.UserId);
             createClientResult.ShouldNotBeNull();
-            createClientResult.Success.ShouldBeFalse();
-
-            result2 = await _restHookClientManagementStore.UpdateAsync(hookUserClientsRecord);
-            result2.ShouldNotBeNull();
-            result2.Success.ShouldBeFalse();
+ 
         }
         [TestMethod]
         public async Task ClientStore_Update_user()
@@ -223,27 +219,19 @@ namespace UnitTest.RestHookStore.Core.Stores
             var record = await _restHookClientManagementStore.CreateHookUserAsync(userId);
             record.ShouldNotBeNull();
 
-
-          
-
-            // still try to use it and update it
+            // Create Hook Client
             var clientRecordResult = await _restHookClientManagementStore.CreateHookClientAsync(record.Data.UserId);
             clientRecordResult.ShouldNotBeNull();
             clientRecordResult.Success.ShouldBeTrue();
 
             var clientRecord = clientRecordResult.Data;
 
-            var result = await _restHookClientManagementStore.UpdateAsync(record.Data);
-            result.ShouldNotBeNull();
-            result.Success.ShouldBeTrue();
-
+ 
             var persitantRecord = await _restHookClientManagementStore.FindHookUserAsync(userId);
             persitantRecord.ShouldNotBeNull();
 
-            persitantRecord.Data.Clients.Count.ShouldBe(record.Data.Clients.Count);
-
-            var culledClients = (persitantRecord.Data.Clients.Except(record.Data.Clients, new ClientRecordEqualityCompare())).ToList();
-            culledClients.Count.ShouldBe(0);
+            persitantRecord.Data.Clients.Count.ShouldBe(1);
+ 
         }
 
         [TestMethod]

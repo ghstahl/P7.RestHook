@@ -205,28 +205,6 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        public Task<RestHookResult> UpdateAsync(HookUser hookUserClientsRecord)
-        {
-            lock (Lock)
-            {
-                var original = FindHookUserAsync(hookUserClientsRecord.UserId).GetAwaiter().GetResult();
-                if (original == null || original.Data == null)
-                {
-                    return Task.FromResult(new RestHookResult()
-                    {
-                        Success = false,
-                        Error = new RestHookResultError()
-                        {
-                            ErrorCode = 1,
-                            Message = $"User:{hookUserClientsRecord.UserId} record doesn't exist in the database"
-                        }
-                    });
-                }
-
-                var record = original.Data;
-                record.Clients = hookUserClientsRecord.Clients;
-                return Task.FromResult(RestHookResult.SuccessResult);
-            }
-        }
+        
     }
 }
