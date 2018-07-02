@@ -3,6 +3,16 @@ using P7.RestHook.Models;
 
 namespace P7.RestHook.ClientManagement.Models
 {
+    public class EventProducer
+    {
+        public List<string> AllowedClients { get; set; }
+        public List<string> SupportedEvents { get; set; }
+    }
+
+    public class EventConsumer
+    {
+        public List<HookClient> HookClients { get; set; }
+    }
     public class HookClient
     {
         public HookClient()
@@ -12,6 +22,7 @@ namespace P7.RestHook.ClientManagement.Models
         public string ClientId { get; set; }
         public string Description { get; set; }
         public List<HookRecord> HookRecords { get; set; }
+        public List<EventRecord> EventRecords { get; set; }
     }
 
     public class HookUser

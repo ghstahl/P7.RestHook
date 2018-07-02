@@ -22,6 +22,7 @@ namespace P7.RestHook.ClientManagement
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<RestHookResult> DeleteHookUserAsync(string userId);
+
         /// <summary>
         /// fetches a hook user client record
         /// </summary>
@@ -76,6 +77,32 @@ namespace P7.RestHook.ClientManagement
         /// <param name="hookRecordId"></param>
         /// <returns></returns>
         Task<RestHookResult> DeleteHookRecordAsync(string userId, string clientId, string hookRecordId);
- 
+
+        /// <summary>
+        /// Find all the EventRecords for a given client
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<IEnumerable<EventRecord>>> FindEventRecordsAsync(string userId, string clientId);
+
+        /// <summary>
+        /// Add a new event record to a client
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<EventRecord>> AddEventRecordAsync(string userId, EventRecord record);
+
+        /// <summary>
+        /// Delete an event record
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task<RestHookResult> DeleteEventRecordAsync(string userId, string clientId, string name);
+
     }
+
 }

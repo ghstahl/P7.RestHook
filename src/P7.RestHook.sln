@@ -24,6 +24,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestHook.Host", "RestHook.H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.ClientManagement", "P7.RestHook.ClientManagement\P7.RestHook.ClientManagement.csproj", "{17503334-8CFF-465B-8F00-2F8E3C3D5176}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.GraphEngineStore", "P7.RestHook.GraphEngineStore\P7.RestHook.GraphEngineStore.csproj", "{F2D0F350-BAA4-41FF-B5ED-B0C2BBF4D775}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD.Tools.Algorithmia.Tests", "SD.Tools.Algorithmia.Tests\SD.Tools.Algorithmia.Tests.csproj", "{68B9A88A-497F-4E53-BC51-4386DDF74AB4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SD.Tools.Algorithmia", "SD.Tools.Algorithmia\SD.Tools.Algorithmia.csproj", "{349D07B6-C3C9-439E-BCEE-5538C1E92674}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +60,18 @@ Global
 		{17503334-8CFF-465B-8F00-2F8E3C3D5176}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17503334-8CFF-465B-8F00-2F8E3C3D5176}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17503334-8CFF-465B-8F00-2F8E3C3D5176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2D0F350-BAA4-41FF-B5ED-B0C2BBF4D775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2D0F350-BAA4-41FF-B5ED-B0C2BBF4D775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2D0F350-BAA4-41FF-B5ED-B0C2BBF4D775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2D0F350-BAA4-41FF-B5ED-B0C2BBF4D775}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68B9A88A-497F-4E53-BC51-4386DDF74AB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68B9A88A-497F-4E53-BC51-4386DDF74AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68B9A88A-497F-4E53-BC51-4386DDF74AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68B9A88A-497F-4E53-BC51-4386DDF74AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{349D07B6-C3C9-439E-BCEE-5538C1E92674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{349D07B6-C3C9-439E-BCEE-5538C1E92674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{349D07B6-C3C9-439E-BCEE-5538C1E92674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{349D07B6-C3C9-439E-BCEE-5538C1E92674}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
