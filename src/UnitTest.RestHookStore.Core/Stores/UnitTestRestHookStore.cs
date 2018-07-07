@@ -42,14 +42,28 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Update_Success()
         {
+            await _restHookStore.DropAsync();
+
             var record = UniqueHookRecord;
             var result = await _restHookStore.UpsertAsync(record);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
 
-            result = await _restHookStore.UpsertAsync(record);
+            var res2 = await _restHookStore.FindByIdAsync(record.Id);
+            res2.ShouldNotBeNull();
+            res2.Success.ShouldBeTrue();
+            res2.Data.ClientId.ShouldBe(record.ClientId);
+
+            var record2 = UniqueHookRecord;
+            record2.Id = record.Id;
+            result = await _restHookStore.UpsertAsync(record2);
             result.ShouldNotBeNull();
             result.Success.ShouldBeTrue();
+
+            res2 = await _restHookStore.FindByIdAsync(record.Id);
+            res2.ShouldNotBeNull();
+            res2.Success.ShouldBeTrue();
+            res2.Data.ClientId.ShouldBe(record2.ClientId);
         }
 
         [TestMethod]

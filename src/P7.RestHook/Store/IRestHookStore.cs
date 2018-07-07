@@ -20,6 +20,13 @@ namespace P7.RestHook.Store
         Task<RestHookResult> UpsertAsync(HookRecord record);
 
         /// <summary>
+        /// Finda a hook record by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<HookRecord>> FindByIdAsync(string id);
+
+        /// <summary>
         /// Deletes a hook record based upon the inputs.
         /// If you only pass ClientId all records for that ClientId will be deleted.
         /// </summary>

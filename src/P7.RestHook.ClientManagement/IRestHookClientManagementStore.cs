@@ -104,10 +104,4 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteEventRecordAsync(string userId, string clientId, string name);
 
     }
-
-    public class EventRecord
-    {
-        public string Name { get; set; }
-        public string ClientId { get; set; }
-    }
 }

@@ -70,21 +70,38 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
+        public Task<RestHookDataResult<HookRecord>> FindByIdAsync(string id)
+        {
+            lock (Lock)
+            {
+                if (string.IsNullOrWhiteSpace(id))
+                {
+                    return Task.FromResult(
+                        RestHookDataResult<HookRecord>.FailedResult(
+                            new RestHookResultError()
+                        {
+                            ErrorCode = 1,
+                            Message = "Input argument is bad"
+                        }));
+                }
+
+                var record = _records.FirstOrDefault(x => x.Id == id);
+                return Task.FromResult(RestHookDataResult<HookRecord>.SuccessResult(record));
+            }
+        }
+
         public Task<RestHookResult> DeleteAsync(HookRecord record)
         {
             lock (Lock)
             {
                 if (record == null || string.IsNullOrWhiteSpace(record.ClientId))
                 {
-                    return Task.FromResult(new RestHookResult()
-                    {
-                        Success = false,
-                        Error = new RestHookResultError()
+                    return Task.FromResult(
+                        RestHookResult.FailedResult(new RestHookResultError()
                         {
                             ErrorCode = 1,
                             Message = "Input argument is bad"
-                        }
-                    });
+                        }));
                 }
 
 
@@ -147,7 +164,10 @@ namespace P7.RestHook.InMemoryStore
                     (string.IsNullOrWhiteSpace(hookRecordQuery.ClientId) &&
                      string.IsNullOrWhiteSpace(hookRecordQuery.EventName)))
                 {
-                    return RestHookDataResult<IPage<HookRecord>>.SuccessResult(new Page<HookRecord>(null, null, new List<HookRecord>()));
+                    return RestHookDataResult<IPage<HookRecord>>.FailedResult(new RestHookResultError()
+                    {
+                        Message = $"{nameof(hookRecordQuery.ClientId)} and {nameof(hookRecordQuery.EventName)} is null"
+                    });
                 }
 
                 byte[] currentPagingState = pagingState;

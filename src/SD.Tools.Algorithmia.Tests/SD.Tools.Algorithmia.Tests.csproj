@@ -12,8 +12,4 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\SD.Tools.Algorithmia\SD.Tools.Algorithmia.csproj" />
-  </ItemGroup>
-
 </Project>
