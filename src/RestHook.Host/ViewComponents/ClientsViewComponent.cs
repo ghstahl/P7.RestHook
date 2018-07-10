@@ -19,15 +19,15 @@ namespace RestHookHost.ViewComponents
             _restHookClientManagementStore = restHookClientManagementStore;
         }
 
-        public HookUser HookUser { get; private set; }
+        public HookUserWithClients HookUserWithClients { get; private set; }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var result = await _restHookClientManagementStore
                     .FindHookUserAsync(_contextAccessor.HttpContext.User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
-            HookUser = result.Data;
-            return View(HookUser);
+            HookUserWithClients = result.Data;
+            return View(HookUserWithClients);
         }
     }
 }

@@ -19,13 +19,34 @@ namespace P7.RestHook.InMemoryStore.Extensions
             services.AddInMemoryRestHookOperationalStore();
             services.AddInMemoryRestHookUserClientManagementStore();
         }
+
         public static void AddInMemoryRestHookOperationalStore(this IServiceCollection services)
         {
-            services.AddSingleton<IRestHookStore, InMemoryRestHookStore>();
+            services.AddSingleton<InMemoryRestHookStore>();
+
+            services.AddSingleton<IRestHookStore>(p =>
+            {
+                return (IRestHookStore) p.GetService(typeof(InMemoryRestHookStore));
+            });
+            services.AddSingleton<IRestHookStoreTest>(p =>
+            {
+                return (IRestHookStoreTest) p.GetService(typeof(InMemoryRestHookStore));
+            });
+
         }
+
         public static void AddInMemoryRestHookUserClientManagementStore(this IServiceCollection services)
         {
-            services.AddSingleton<IRestHookClientManagementStore, InMemoryRestHookClientManagementStore>();
+            services.AddSingleton<InMemoryRestHookClientManagementStore>();
+
+            services.AddSingleton<IRestHookClientManagementStore>(p =>
+            {
+                return (IRestHookClientManagementStore)p.GetService(typeof(InMemoryRestHookClientManagementStore));
+            });
+            services.AddSingleton<IRestHookClientManagementStoreTest>(p =>
+            {
+                return (IRestHookClientManagementStoreTest)p.GetService(typeof(InMemoryRestHookClientManagementStore));
+            });
         }
     }
 }

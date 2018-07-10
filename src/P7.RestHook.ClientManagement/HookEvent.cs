@@ -1,8 +1,7 @@
 ﻿namespace P7.RestHook.ClientManagement
 {
-    public class EventRecord
+    public class HookEvent
     {
         public string Name { get; set; }
-        public string ClientId { get; set; }
     }
 }

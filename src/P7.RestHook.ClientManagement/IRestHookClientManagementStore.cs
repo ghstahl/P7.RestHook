@@ -10,11 +10,11 @@ namespace P7.RestHook.ClientManagement
     public interface IRestHookClientManagementStore
     {
         /// <summary>
-        /// Creates a new hook client user
+        /// Upserts a new hook client user
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>a hook user client record</returns>
-        Task<RestHookDataResult<HookUser>> CreateHookUserAsync(string userId);
+        Task<RestHookDataResult<HookUser>> UpsertHookUserAsync(string userId);
 
         /// <summary>
         /// Deletes a new hook client user
@@ -24,11 +24,17 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteHookUserAsync(string userId);
 
         /// <summary>
-        /// fetches a hook user client record
+        /// fetches a hook user 
         /// </summary>
         /// <param name="userId"></param>
         /// <returns>a hook user client record</returns>
         Task<RestHookDataResult<HookUser>> FindHookUserAsync(string userId);
+        /// <summary>
+        /// returns all clients for a given user
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<List<HookClient>>> FindHookUserClientsAsync(string userId);
 
         /// <summary>
         /// Finds a user client record
@@ -39,7 +45,7 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookDataResult<HookClient>> FindHookClientAsync(string userId, string clientId);
 
         /// <summary>
-        /// creates a new HookClient
+        /// creates a new HookClientWithHookRecords
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -79,21 +85,50 @@ namespace P7.RestHook.ClientManagement
         Task<RestHookResult> DeleteHookRecordAsync(string userId, string clientId, string hookRecordId);
 
         /// <summary>
-        /// Find all the EventRecords for a given client
+        /// Find all the HookEvent for a given client
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="clientId"></param>
         /// <returns></returns>
-        Task<RestHookDataResult<IEnumerable<EventRecord>>> FindEventRecordsAsync(string userId, string clientId);
+        Task<RestHookDataResult<IEnumerable<HookEvent>>> FindHookEventsAsync(string userId, string clientId);
+
+        Task<RestHookDataResult<IEnumerable<string>>> FindConsumerHookEventCallbackUrlsAsync(
+            string userId, string clientId,string eventName);
 
         /// <summary>
-        /// Add a new event record to a client
+        ///  Add a new event record to a client
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="record"></param>
+        /// <param name="clientId"></param>
+        /// <param name="eventName"></param>
         /// <returns></returns>
-        Task<RestHookDataResult<EventRecord>> AddEventRecordAsync(string userId, EventRecord record);
+        Task<RestHookResult> AddProducesHookEventAsync(
+            string userId, string clientId,string eventName);
 
+        /// <summary>
+        /// adds a consumer to an event
+        /// </summary>
+        /// <param name="producerUserId"></param>
+        /// <param name="producerClientId"></param>
+        /// <param name="eventName"></param>
+        /// <param name="consumerUserId"></param>
+        /// <param name="consumerClientId"></param>
+        /// <param name="callbackUrl"></param>
+        /// <returns></returns>
+        Task<RestHookResult> AddConsumerHookEventAsync(
+            string producerUserId, string producerClientId, string eventName,
+            string consumerUserId, string consumerClientId, string callbackUrl);
+        
+        /// <summary>
+        /// Finds an event record
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="clientId"></param>
+        /// <param name="eventName"></param>
+        /// <returns></returns>
+        Task<RestHookDataResult<HookEvent>> FindHookEventAsync(string userId, string clientId, string eventName);
+
+ 
         /// <summary>
         /// Delete an event record
         /// </summary>
@@ -101,7 +136,8 @@ namespace P7.RestHook.ClientManagement
         /// <param name="clientId"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        Task<RestHookResult> DeleteEventRecordAsync(string userId, string clientId, string name);
+        Task<RestHookResult> DeleteHookEventAsync(string userId, string clientId, string name);
+        Task<RestHookResult> DeleteConsumerHookEventAsync(string userId, string clientId, string name);
 
     }
 }

@@ -3,10 +3,10 @@
 
 
 
-@if (Model?.Client?.ClientId != null)
+@if (Model?.ClientWithHookRecords?.ClientId != null)
 {
-    var returnUrl = $"/RestHook?clientId={Model.Client.ClientId}";
-    var hrefAddNewCallbackUrl = $"/RestHook/NewCallbackUrl/{Model.Client.ClientId}?newCallbackUrlReturnUrl={returnUrl}";
+    var returnUrl = $"/RestHook?clientId={Model.ClientWithHookRecords.ClientId}";
+    var hrefAddNewCallbackUrl = $"/RestHook/NewCallbackUrl/{Model.ClientWithHookRecords.ClientId}?newCallbackUrlReturnUrl={returnUrl}";
                   
     <div class="row">
     <table id="user" class="table table-bordered table-striped" style="clear: both">
@@ -15,14 +15,14 @@
         <tr>
             <td width="35%">ClientId</td>
             <td width="65%">
-                @Model.Client.ClientId
+                @Model.ClientWithHookRecords.ClientId
             </td>
         </tr>
         <tr>
             <td width="35%">Description</td>
             <td width="65%">
                 <a href="#" id="description" data-type="text" data-value="" 
-                   data-placement="right" data-title="Description">@Model.Client.Description</a>
+                   data-placement="right" data-title="Description">@Model.ClientWithHookRecords.Description</a>
             </td>
         </tr>
         <tr>
@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
  
-                    @foreach (var hookRecord in Model.Client.HookRecords)
+                    @foreach (var hookRecord in Model.ClientWithHookRecords.HookRecords)
                     {
                         <tr>
                             <td>@hookRecord.EventName</td>

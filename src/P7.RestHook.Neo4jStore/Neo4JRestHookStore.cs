@@ -9,9 +9,13 @@ using P7.RestHook.Store;
 
 namespace P7.RestHook.Neo4jStore
 {
-    public class Neo4JRestHookStore : BaseStore, IRestHookStore
+    public class Neo4JRestHookStore : 
+        BaseStore, 
+        IRestHookStore,
+        IRestHookStoreTest
     {
-        public Neo4JRestHookStore(IGraphClient graphClient) : base(graphClient)
+        public Neo4JRestHookStore(IGraphClient graphClient) :
+            base(graphClient)
         {
         }
 

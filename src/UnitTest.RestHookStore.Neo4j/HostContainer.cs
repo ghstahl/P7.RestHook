@@ -24,7 +24,7 @@ namespace UnitTest.RestHookStore.Neo4j
                         .AddLogging();
 
                     serviceCollection.AddSingleton(GetGraphClient());
-                    serviceCollection.AddInMemoryRestHookOperationalStore();
+                    serviceCollection.AddNeo4jRestHook();
 
                     _serviceProvider = serviceCollection.BuildServiceProvider();
                 }

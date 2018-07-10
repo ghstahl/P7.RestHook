@@ -9,6 +9,7 @@ namespace UnitTest.RestHookStore.Core.Stores
     public abstract class UnitTestRestHookStore
     {
         private IRestHookStore _restHookStore;
+        private IRestHookStoreTest _restHookStoreTest;
 
         private static HookRecord UniqueHookRecord => new HookRecord
         {
@@ -19,11 +20,16 @@ namespace UnitTest.RestHookStore.Core.Stores
             ValidatedCallbackUrl = false
         };
 
-        public UnitTestRestHookStore(IRestHookStore restHookStore)
+        public UnitTestRestHookStore(IRestHookStoreTest restHookStoreTest,IRestHookStore restHookStore)
         {
+            _restHookStoreTest = restHookStoreTest;
             _restHookStore = restHookStore;
         }
-
+        [TestInitialize]
+        public async Task Initialize()
+        {
+            await _restHookStoreTest.DropAsync();
+        }
         [TestMethod]
         public async Task DI_Valid()
         {
@@ -42,7 +48,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Update_Success()
         {
-            await _restHookStore.DropAsync();
+            
 
             var record = UniqueHookRecord;
             var result = await _restHookStore.UpsertAsync(record);
@@ -69,7 +75,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Page_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var record = UniqueHookRecord;
             var result = await _restHookStore.UpsertAsync(record);
             result.ShouldNotBeNull();
@@ -85,7 +91,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Page_Delete_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var record = UniqueHookRecord;
             var result = await _restHookStore.UpsertAsync(record);
             result.ShouldNotBeNull();
@@ -108,7 +114,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_ManySameEvent_SameClient_Page_Delete_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var record = UniqueHookRecord;
             var result = await _restHookStore.UpsertAsync(record);
             result.ShouldNotBeNull();
@@ -137,7 +143,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_ManySameEvent_Page_Delete_Fail()
         {
-            await _restHookStore.DropAsync();
+            
             var eventName = Unique.S;
             var count = 0;
             for (int i = 0; i < 10; ++i)
@@ -171,7 +177,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Many_SameClient_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var clientId = Unique.S;
             var count = 0;
             for (int i = 0; i < 10; ++i)
@@ -213,7 +219,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Many_SameClient_delete_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var clientId = Unique.S;
             var count = 0;
             for (int i = 0; i < 10; ++i)
@@ -260,7 +266,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Many_Client_SameEvent_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var eventName = Unique.S;
             var count = 0;
             for (int i = 0; i < 10; ++i)
@@ -303,7 +309,7 @@ namespace UnitTest.RestHookStore.Core.Stores
         [TestMethod]
         public async Task Upsert_Many_SameClient_onepage_Success()
         {
-            await _restHookStore.DropAsync();
+            
             var clientId = Unique.S;
             var eventName = Unique.S;
             var rc = UniqueHookRecord;

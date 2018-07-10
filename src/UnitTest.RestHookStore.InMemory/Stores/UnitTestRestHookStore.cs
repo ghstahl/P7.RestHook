@@ -7,7 +7,9 @@ namespace UnitTest.RestHookStore.InMemory.Stores
     [TestClass]
     public class UnitTestRestHookStore: UnitTest.RestHookStore.Core.Stores.UnitTestRestHookStore
     {
-        public UnitTestRestHookStore() : base(HostContainer.ServiceProvider.GetService<IRestHookStore>())
+        public UnitTestRestHookStore() : base(
+            HostContainer.ServiceProvider.GetService<IRestHookStoreTest>(),
+            HostContainer.ServiceProvider.GetService<IRestHookStore>())
         {
         }
     }

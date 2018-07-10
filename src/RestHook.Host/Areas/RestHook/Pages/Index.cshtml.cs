@@ -13,7 +13,7 @@ namespace RestHookHost.Areas.RestHook.Pages
     public class IndexModel : PageModel
     {
         private IRestHookClientManagementStore _restHookClientManagementStore;
-        public HookUser HookUser { get; set; }
+        public HookUserWithClients HookUserWithClients { get; set; }
         public IndexModel(IRestHookClientManagementStore restHookClientManagementStore)
         {
             _restHookClientManagementStore = restHookClientManagementStore;
@@ -23,7 +23,7 @@ namespace RestHookHost.Areas.RestHook.Pages
             var result =
                 await _restHookClientManagementStore.FindHookUserAsync(User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
-            HookUser = result.Data;
+            HookUserWithClients = result.Data;
             ClientId = clientId;
         }
 

@@ -9,7 +9,7 @@ using P7.RestHook.Store;
 
 namespace P7.RestHook.InMemoryStore
 {
-    public class InMemoryRestHookStore: IRestHookStore
+    public class InMemoryRestHookStore: IRestHookStore, IRestHookStoreTest
     {
         private List<HookRecord> _records;
         private static readonly object Lock = new object();
@@ -49,7 +49,7 @@ namespace P7.RestHook.InMemoryStore
                 }
              
                 var query = from item in _records
-                    where item.Id == record.Id && item.ClientId == record.ClientId
+                    where item.Id == record.Id 
                     select item;
                 var foundRecord = query.FirstOrDefault();
                 if (foundRecord == null)
@@ -65,6 +65,10 @@ namespace P7.RestHook.InMemoryStore
                         foundRecord.CallbackUrl = record.CallbackUrl;
                         foundRecord.ValidatedCallbackUrl = false;
                     }
+
+                    foundRecord.ClientId = record.ClientId;
+                    foundRecord.EventName = record.EventName;
+                    
                 }
                 return Task.FromResult(RestHookResult.SuccessResult);
             }

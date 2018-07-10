@@ -9,22 +9,24 @@ using P7.RestHook.Store;
 
 namespace P7.RestHook.InMemoryStore
 {
-    public partial class InMemoryRestHookClientManagementStore : IRestHookClientManagementStore
+    public partial class InMemoryRestHookClientManagementStore : 
+        IRestHookClientManagementStore,
+        IRestHookClientManagementStoreTest
     {
         private object Lock { get; set; }
-        List<HookUser> _records;
+        List<HookUserWithClients> _records;
 
         public InMemoryRestHookClientManagementStore()
         {
             Lock = new object();
-            _records = new List<HookUser>();
+            _records = new List<HookUserWithClients>();
         }
-        public Task<RestHookDataResult<HookUser>> FindHookUserAsync(string userId)
+        public Task<RestHookDataResult<HookUserWithClients>> FindHookUserAsync(string userId)
         {
             lock (Lock)
             {
                 var record = _records.FirstOrDefault(item => item.UserId == userId);
-                return Task.FromResult(RestHookDataResult<HookUser>.SuccessResult(record));
+                return Task.FromResult(RestHookDataResult<HookUserWithClients>.SuccessResult(record));
             }
         }
  
@@ -156,17 +158,17 @@ namespace P7.RestHook.InMemoryStore
 
      
 
-        public Task<RestHookDataResult<HookUser>> CreateHookUserAsync(string userId)
+        public Task<RestHookDataResult<HookUserWithClients>> UpsertHookUserAsync(string userId)
         {
             lock (Lock)
             {
-                var record = new HookUser()
+                var record = new HookUserWithClients()
                 {
                     UserId = userId,
                     Clients = new List<HookClient>()
                 };
                 _records.Add(record);
-                var result = RestHookDataResult<HookUser>.SuccessResult(record);
+                var result = RestHookDataResult<HookUserWithClients>.SuccessResult(record);
                 return Task.FromResult(result);
             }
         }
@@ -205,6 +207,14 @@ namespace P7.RestHook.InMemoryStore
             }
         }
 
-        
+
+        public Task<RestHookResult> DropAsync()
+        {
+            lock (Lock)
+            {
+                _records = new List<HookUserWithClients>();
+                return Task.FromResult(RestHookResult.SuccessResult);
+            }
+        }
     }
 }

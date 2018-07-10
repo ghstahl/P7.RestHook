@@ -7,11 +7,7 @@ namespace P7.RestHook.Store
 {
     public interface IRestHookStore
     {
-        /// <summary>
-        /// Drops the database
-        /// </summary>
-        /// <returns></returns>
-        Task<RestHookResult> DropAsync();
+    
         /// <summary>
         /// Insert or Update a hook
         /// </summary>

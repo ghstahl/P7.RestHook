@@ -8,20 +8,23 @@ namespace P7.RestHook.Neo4jStore.Extensions
 {
     public static class AspNetCoreExtensions
     {
-        public static void AddInMemoryRestHook(this IServiceCollection services)
+        public static void AddNeo4jRestHook(this IServiceCollection services)
         {
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<HookRecord, HookRecord>();
             });
-            services.AddInMemoryRestHookOperationalStore();
-            services.AddInMemoryRestHookUserClientManagementStore();
+            services.AddNeo4jRestHookOperationalStore();
+            services.AddNeo4jRestHookUserClientManagementStore();
         }
-        public static void AddInMemoryRestHookOperationalStore(this IServiceCollection services)
+        public static void AddNeo4jRestHookOperationalStore(this IServiceCollection services)
         {
             services.AddSingleton<IRestHookStore, Neo4JRestHookStore>();
+            services.AddSingleton<IRestHookStoreTest, Neo4JRestHookStore>();
+            
         }
-        public static void AddInMemoryRestHookUserClientManagementStore(this IServiceCollection services)
+        public static void AddNeo4jRestHookUserClientManagementStore(this IServiceCollection services)
         {
+            services.AddSingleton<IRestHookClientManagementStoreTest, Neo4jRestHookClientManagementStore>();
             services.AddSingleton<IRestHookClientManagementStore, Neo4jRestHookClientManagementStore>();
         }
     }

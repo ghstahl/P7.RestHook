@@ -66,6 +66,7 @@ namespace RestHookHost.Areas.RestHook.Pages
 
                 // make sure we are not double adding.
                 var eventName = Input.Items[Input.Number-1].Text;
+                /*
                 var foundHookRecord = record.HookRecords.FirstOrDefault(hookRecord =>
                     (hookRecord.EventName == eventName && string.Compare(hookRecord.CallbackUrl, Input.CallbackUrl,
                          StringComparison.OrdinalIgnoreCase) == 0));
@@ -80,7 +81,7 @@ namespace RestHookHost.Areas.RestHook.Pages
                         });
                 }
 
-
+    */
 
                 return LocalRedirect($"{returnUrl}");
             }

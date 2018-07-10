@@ -20,22 +20,22 @@ namespace RestHookHost.ViewComponents
         }
 
         public HookUserClientRecord HookUserClientRecord { get; private set; }
-        public HookUser HookUser { get; private set; }
+        public HookUserWithClients HookUserWithClients { get; private set; }
         public async Task<IViewComponentResult> InvokeAsync(string clientId)
         {
             HookUserClientRecord = null;
             var result = await _restHookClientManagementStore
                     .FindHookUserAsync(_contextAccessor.HttpContext.User.Claims
                     .FirstOrDefault(x => x.Type == "normailzed_id").Value);
-            HookUser = result.Data;
-            if (HookUser != null)
+            HookUserWithClients = result.Data;
+            if (HookUserWithClients != null)
             {
-                var clientRecord = HookUser.Clients.FirstOrDefault(x => x.ClientId == clientId);
+                var clientRecord = HookUserWithClients.Clients.FirstOrDefault(x => x.ClientId == clientId);
 
                 HookUserClientRecord = new HookUserClientRecord()
                 {
-                    UserId = HookUser.UserId,
-                    Client = clientRecord
+                    UserId = HookUserWithClients.UserId,
+                    ClientWithHookRecords = clientRecord
                 };
             }
            
