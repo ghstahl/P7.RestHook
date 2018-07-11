@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A425318E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest.RestHookStore.InMemory", "UnitTest.RestHookStore.InMemory\UnitTest.RestHookStore.InMemory.csproj", "{F1923D6A-8D88-43C9-88C5-39E4EEAE41BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.InMemoryStore", "P7.RestHook.InMemoryStore\P7.RestHook.InMemoryStore.csproj", "{436A6983-3B42-47BD-AE6F-69D3377CA11E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{64269D2D-CA73-498E-BF0B-A91598FCBD6A}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
@@ -24,9 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestHook.Host", "RestHook.H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.ClientManagement", "P7.RestHook.ClientManagement\P7.RestHook.ClientManagement.csproj", "{17503334-8CFF-465B-8F00-2F8E3C3D5176}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P7.RestHook.Neo4jStore", "P7.RestHook.Neo4jStore\P7.RestHook.Neo4jStore.csproj", "{91190047-BD29-401B-9381-4CF44A849593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "P7.RestHook.Neo4jStore", "P7.RestHook.Neo4jStore\P7.RestHook.Neo4jStore.csproj", "{91190047-BD29-401B-9381-4CF44A849593}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest.RestHookStore.Neo4j", "UnitTest.RestHookStore.Neo4j\UnitTest.RestHookStore.Neo4j.csproj", "{EED7A958-E503-45EC-9EB3-AB8026C6C360}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest.RestHookStore.Neo4j", "UnitTest.RestHookStore.Neo4j\UnitTest.RestHookStore.Neo4j.csproj", "{EED7A958-E503-45EC-9EB3-AB8026C6C360}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +40,6 @@ Global
 		{F1923D6A-8D88-43C9-88C5-39E4EEAE41BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1923D6A-8D88-43C9-88C5-39E4EEAE41BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1923D6A-8D88-43C9-88C5-39E4EEAE41BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{436A6983-3B42-47BD-AE6F-69D3377CA11E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{436A6983-3B42-47BD-AE6F-69D3377CA11E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{436A6983-3B42-47BD-AE6F-69D3377CA11E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{436A6983-3B42-47BD-AE6F-69D3377CA11E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A002D5C4-2E53-40AE-A6D8-22CE85E96795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A002D5C4-2E53-40AE-A6D8-22CE85E96795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A002D5C4-2E53-40AE-A6D8-22CE85E96795}.Release|Any CPU.ActiveCfg = Release|Any CPU

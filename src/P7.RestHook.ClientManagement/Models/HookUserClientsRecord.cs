@@ -27,7 +27,12 @@ namespace P7.RestHook.ClientManagement.Models
         public string ClientId { get; set; }
         public ProducerEvent ProducerEvent { get; set; }
     }
- 
+
+    public class HookUrl
+    {
+        public string Url { get; set; }
+        public bool Validated { get; set; }
+    }
     public class HookClient
     {
         public string ClientId { get; set; }

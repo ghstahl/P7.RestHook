@@ -92,7 +92,7 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookDataResult<IEnumerable<HookEvent>>> FindHookEventsAsync(string userId, string clientId);
 
-        Task<RestHookDataResult<IEnumerable<string>>> FindConsumerHookEventCallbackUrlsAsync(
+        Task<RestHookDataResult<IEnumerable<HookUrl>>> FindConsumerHookEventCallbackUrlsAsync(
             string userId, string clientId,string eventName);
 
         /// <summary>
@@ -138,6 +138,6 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookResult> DeleteHookEventAsync(string userId, string clientId, string name);
         Task<RestHookResult> DeleteConsumerHookEventAsync(string userId, string clientId, string name);
-
+        Task<RestHookDataResult<HookUrl>> FindHookUrlAsync(string url);
     }
 }
