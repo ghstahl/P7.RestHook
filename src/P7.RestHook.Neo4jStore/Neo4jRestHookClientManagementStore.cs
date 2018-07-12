@@ -88,15 +88,23 @@ namespace P7.RestHook.Neo4jStore
             return RestHookResult.SuccessResult;
 
         }
-        public async Task<RestHookDataResult<HookUrl>> FindHookUrlAsync(string url)
+        public async Task<RestHookDataResult<HookUrl>> FindHookUrlAsync(
+            string userId, string clientId, string url)
         {
+            Throw.ArgumentException.IfNull(userId, nameof(userId));
+            Throw.ArgumentException.IfNull(clientId, nameof(clientId));
             Throw.ArgumentException.IfNull(url, nameof(url));
             ThrowIfDisposed();
 
             var query = new CypherFluentQuery(GraphClient)
-                .Match($"(r:HookUrl)")
-                .Where((HookUrl r) => r.Url == url)
-                .Return(r => r.As<HookUrl>());
+                .Match(
+                    "((consumerUser:HookUser)-[:OWNS]->(consumerHookClient:HookClient))",
+                    "((consumerHookClient:HookClient)-[:OWNS]->(hookUrl:HookUrl))")
+                .Where((HookUser consumerUser) => consumerUser.UserId == userId)
+                .AndWhere((HookClient consumerHookClient) => consumerHookClient.ClientId == clientId)
+                .AndWhere((HookUrl hookUrl) => hookUrl.Url == url)
+                .Return(hookUrl => hookUrl.As<HookUrl>());
+            var foundHookUrl = (await query.ResultsAsync).SingleOrDefault();
 
             var result = (await query.ResultsAsync).SingleOrDefault();
             if (result == null)
@@ -225,7 +233,7 @@ namespace P7.RestHook.Neo4jStore
             return RestHookResult.SuccessResult;
         }
 
-        public async Task<RestHookResult> DeepCleanHookClientAsync(string userId, string clientId)
+        public async Task<RestHookResult> DeepCleanProducerHookClientAsync(string userId, string clientId)
         {
             Throw.ArgumentException.IfNullOrWhiteSpace(userId, nameof(userId));
             Throw.ArgumentException.IfNullOrWhiteSpace(clientId, nameof(clientId));
@@ -239,6 +247,25 @@ namespace P7.RestHook.Neo4jStore
                 .Where((HookUser user) => user.UserId == userId)
                 .AndWhere((HookClient client) => client.ClientId == clientId)
                 .DetachDelete("rHookClient,rHookEvent,hookEvent");
+
+            await query.ExecuteWithoutResultsAsync();
+            return RestHookResult.SuccessResult;
+        }
+
+        public async Task<RestHookResult> DeepCleanConsumerHookClientAsync(string userId, string clientId)
+        {
+            Throw.ArgumentException.IfNullOrWhiteSpace(userId, nameof(userId));
+            Throw.ArgumentException.IfNullOrWhiteSpace(clientId, nameof(clientId));
+            ThrowIfDisposed();
+
+            var query = new CypherFluentQuery(GraphClient)
+                .Match(
+                    "((user:HookUser)-[:OWNS]->(client:HookClient))",
+                    "((client:HookClient)-[rHookClient]->(hookUrl:HookUrl))",
+                    "((hookUrl:HookUrl)-[rHookUrl]-())")
+                .Where((HookUser user) => user.UserId == userId)
+                .AndWhere((HookClient client) => client.ClientId == clientId)
+                .DetachDelete("rHookUrl,rHookClient,hookUrl");
 
             await query.ExecuteWithoutResultsAsync();
             return RestHookResult.SuccessResult;
@@ -278,7 +305,7 @@ namespace P7.RestHook.Neo4jStore
             return RestHookDataResult<IEnumerable<HookEvent>>.SuccessResult(result);
         }
 
-        public async Task<RestHookDataResult<IEnumerable<HookUrl>>> FindConsumerHookEventCallbackUrlsAsync(
+        public async Task<RestHookDataResult<IEnumerable<HookUrl>>> FindProducerHookEventCallbackUrlsAsync(
             string userId, string clientId,string eventName)
         {
             Throw.ArgumentException.IfNull(userId, nameof(userId));
@@ -342,12 +369,16 @@ namespace P7.RestHook.Neo4jStore
             string eventName,
             string consumerUserId, string consumerClientId, string callbackUrl)
         {
-            var hookUrlFindResult = await FindHookUrlAsync(callbackUrl);
-            if (!hookUrlFindResult.Success)
+            var foundUrlResult = await FindHookUrlAsync(consumerUserId, consumerClientId, callbackUrl);
+            HookUrl foundHookUrl = foundUrlResult.Success ? foundUrlResult.Data : null;
+            var urlId = foundHookUrl == null?Unique.G: foundHookUrl.Id;
+            if (foundHookUrl == null)
             {
-                var hookUrl = new HookUrl()
+                foundHookUrl = new HookUrl()
                 {
-                    Url = callbackUrl, Validated = false
+                    Id = urlId,
+                    Url = callbackUrl,
+                    Validated = false
                 };
                 var queryCreateHookUrl = new CypherFluentQuery(GraphClient)
                     .Merge("(n:HookUrl { url: {url} })")
@@ -355,24 +386,25 @@ namespace P7.RestHook.Neo4jStore
                     .Set("n = {record}")
                     .WithParams(new
                     {
-                        url = hookUrl.Url,
-                        record = hookUrl
+                        url = foundHookUrl.Url,
+                        record = foundHookUrl
                     });
                 await queryCreateHookUrl.ExecuteWithoutResultsAsync();
-
             }
 
-            var query = new CypherFluentQuery(GraphClient)
+            
+
+            var query2 = new CypherFluentQuery(GraphClient)
                 .Match(
                     "((consumerUser:HookUser)-[:OWNS]->(consumerHookClient:HookClient))",
                     "(hookUrl:HookUrl)")
                 .Where((HookUser consumerUser) => consumerUser.UserId == consumerUserId)
                 .AndWhere((HookClient consumerHookClient) => consumerHookClient.ClientId == consumerClientId)
-                .AndWhere((HookUrl hookUrl) => hookUrl.Url == callbackUrl)
+                .AndWhere((HookUrl hookUrl) => hookUrl.Id == urlId)
                 .CreateUnique($"(consumerHookClient)-[:OWNS]->(hookUrl)");
-            await query.ExecuteWithoutResultsAsync();
+            await query2.ExecuteWithoutResultsAsync();
 
-            query = new CypherFluentQuery(GraphClient)
+            var query3 = new CypherFluentQuery(GraphClient)
                 .Match(
                     "((producerUser:HookUser)-[:OWNS]->(producerHookClient:HookClient))",
                     "((producerHookClient:HookClient)-[:PRODUCES]->(hookEvent:HookEvent))",
@@ -383,7 +415,7 @@ namespace P7.RestHook.Neo4jStore
                 .AndWhere((HookUrl hookUrl) => hookUrl.Url == callbackUrl)
                 .CreateUnique("(hookEvent)-[:PUBLISHES_TO]->(hookUrl)");
 
-            await query.ExecuteWithoutResultsAsync();
+            await query3.ExecuteWithoutResultsAsync();
             return RestHookResult.SuccessResult;
         }
 

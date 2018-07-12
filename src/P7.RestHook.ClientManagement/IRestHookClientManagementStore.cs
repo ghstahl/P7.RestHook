@@ -59,7 +59,8 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookResult> DeleteHookClientAsync(string userId, string clientId);
 
-        Task<RestHookResult> DeepCleanHookClientAsync(string userId, string clientId);
+        Task<RestHookResult> DeepCleanProducerHookClientAsync(string userId, string clientId);
+        Task<RestHookResult> DeepCleanConsumerHookClientAsync(string userId, string clientId);
 
         /// <summary>
         /// Find a HookRecords by ClientId
@@ -94,8 +95,12 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookDataResult<IEnumerable<HookEvent>>> FindHookEventsAsync(string userId, string clientId);
 
-        Task<RestHookDataResult<IEnumerable<HookUrl>>> FindConsumerHookEventCallbackUrlsAsync(
+        Task<RestHookDataResult<IEnumerable<HookUrl>>> FindProducerHookEventCallbackUrlsAsync(
             string userId, string clientId,string eventName);
+        Task<RestHookDataResult<IEnumerable<HookUrl>>> FindConsumerHookEventCallbackUrlAsync(
+            string userId, string clientId, string eventName);
+        Task<RestHookDataResult<IEnumerable<HookUrl>>> FindConsumerHookEventCallbackUrlsAsync(
+            string userId, string clientId);
 
         /// <summary>
         ///  Add a new event record to a client
@@ -140,6 +145,6 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookResult> DeleteHookEventAsync(string userId, string clientId, string name);
         Task<RestHookResult> DeleteConsumerHookEventAsync(string userId, string clientId, string name);
-        Task<RestHookDataResult<HookUrl>> FindHookUrlAsync(string url);
+        Task<RestHookDataResult<HookUrl>> FindHookUrlAsync(string userId, string clientId,string url);
     }
 }

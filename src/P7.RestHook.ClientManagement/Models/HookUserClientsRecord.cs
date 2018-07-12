@@ -21,17 +21,24 @@ namespace P7.RestHook.ClientManagement.Models
         public string EventName { get; set; }
     }
 
-    public class ConsumerRecord
+    public class ConsumerEvent
     {
         public string UserId { get; set; }
         public string ClientId { get; set; }
-        public ProducerEvent ProducerEvent { get; set; }
+        public HookUrl HookUrl { get; set; }
     }
 
     public class HookUrl
     {
+        public string Id { get; set;}
         public string Url { get; set; }
         public bool Validated { get; set; }
+    }
+
+    public class PublishRecord
+    {
+        public ProducerEvent ProducerEvent { get; set; }
+        public ConsumerEvent ConsumerEvent { get; set; }
     }
     public class HookClient
     {
