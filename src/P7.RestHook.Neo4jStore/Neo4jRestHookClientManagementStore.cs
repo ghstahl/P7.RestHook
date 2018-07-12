@@ -225,6 +225,25 @@ namespace P7.RestHook.Neo4jStore
             return RestHookResult.SuccessResult;
         }
 
+        public async Task<RestHookResult> DeepCleanHookClientAsync(string userId, string clientId)
+        {
+            Throw.ArgumentException.IfNullOrWhiteSpace(userId, nameof(userId));
+            Throw.ArgumentException.IfNullOrWhiteSpace(clientId, nameof(clientId));
+            ThrowIfDisposed();
+
+            var query = new CypherFluentQuery(GraphClient)
+                .Match(
+                    "((user:HookUser)-[:OWNS]->(client:HookClient))",
+                    "((client:HookClient)-[rHookClient]->(hookEvent:HookEvent))",
+                    "((hookEvent:HookEvent)-[rHookEvent]->())")
+                .Where((HookUser user) => user.UserId == userId)
+                .AndWhere((HookClient client) => client.ClientId == clientId)
+                .DetachDelete("rHookClient,rHookEvent,hookEvent");
+
+            await query.ExecuteWithoutResultsAsync();
+            return RestHookResult.SuccessResult;
+        }
+
         public async Task<RestHookDataResult<IEnumerable<HookRecord>>> FindHookRecordsAsync(string userId, string clientId)
         {
             throw new System.NotImplementedException();
@@ -292,7 +311,11 @@ namespace P7.RestHook.Neo4jStore
                 return RestHookResult.SuccessResult;
             }
 
-            var hookEventNew = new HookEvent() { Name = eventName };
+            var hookEventNew = new HookEvent()
+            {
+                Id = Unique.G,
+                Name = eventName
+            };
 
             var query = new CypherFluentQuery(GraphClient)
                 .Create("(:HookEvent {record})")
@@ -301,10 +324,11 @@ namespace P7.RestHook.Neo4jStore
 
             query = new CypherFluentQuery(GraphClient)
                 .Match(
-                    "((user:HookUser)-[:OWNS]->(hookClient:HookClient))", "(hookEvent:HookEvent)")
+                    "((user:HookUser)-[:OWNS]->(hookClient:HookClient))", 
+                    "(hookEvent:HookEvent)")
                 .Where((HookUser user) => user.UserId == userId)
                 .AndWhere((HookClient hookClient) => hookClient.ClientId == clientId)
-                .AndWhere((HookEvent hookEvent) => hookEvent.Name == eventName)
+                .AndWhere((HookEvent hookEvent) => hookEvent.Id == hookEventNew.Id)
                 .AndWhere("(user)-[:OWNS]->(hookClient)")
                 .CreateUnique("(hookClient)-[:PRODUCES]->(hookEvent)");
             await query.ExecuteWithoutResultsAsync();

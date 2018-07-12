@@ -59,6 +59,8 @@ namespace P7.RestHook.ClientManagement
         /// <returns></returns>
         Task<RestHookResult> DeleteHookClientAsync(string userId, string clientId);
 
+        Task<RestHookResult> DeepCleanHookClientAsync(string userId, string clientId);
+
         /// <summary>
         /// Find a HookRecords by ClientId
         /// </summary>

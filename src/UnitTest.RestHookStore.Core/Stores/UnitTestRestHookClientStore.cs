@@ -111,6 +111,130 @@ namespace UnitTest.RestHookStore.Core.Stores
            
         }
         [TestMethod]
+        public async Task DeepClean_client()
+        {
+           
+            var consumerUserId = Unique.S;
+
+            List<string> UserIds = new List<string>();
+            List<HookClient> producerClients = new List<HookClient>();
+            List<string> eventNames = new List<string>();
+            for (int i = 0; i < 10; ++i)
+            {
+                eventNames.Add(Unique.S);
+            }
+
+            for (int i = 0; i < 2; ++i)
+            {
+                var userId = Unique.S;
+                UserIds.Add(userId);
+                var result = await _restHookClientManagementStore.UpsertHookUserAsync(userId);
+                result.ShouldNotBeNull();
+                result.Data.ShouldNotBeNull();
+
+                var clientRecordResult = await _restHookClientManagementStore
+                    .CreateHookClientAsync(userId);
+                clientRecordResult.ShouldNotBeNull();
+                clientRecordResult.Success.ShouldBeTrue();
+                var hookClient = clientRecordResult.Data;
+                producerClients.Add(hookClient);
+
+               
+                for (int iEvent = 0; iEvent < 10; ++iEvent)
+                {
+                    var eventName = eventNames[iEvent];
+                    var eventCreateResult =
+                        await _restHookClientManagementStore.AddProducesHookEventAsync(
+                            userId, hookClient.ClientId, eventName);
+                    eventCreateResult.ShouldNotBeNull();
+                    eventCreateResult.Success.ShouldBeTrue();
+
+                    var eventResult = await _restHookClientManagementStore
+                        .FindHookEventAsync(userId, hookClient.ClientId, eventName);
+                    eventResult.ShouldNotBeNull();
+                    eventResult.Success.ShouldBeTrue();
+                    eventResult.Data.ShouldNotBeNull();
+                    var hookEvent = eventResult.Data;
+                    hookEvent.Name.ShouldBe(eventName);
+                }
+            }
+
+
+            var result2 = await _restHookClientManagementStore.UpsertHookUserAsync(consumerUserId);
+            result2.ShouldNotBeNull();
+            result2.Data.ShouldNotBeNull();
+
+            var clientRecordResult2 = await _restHookClientManagementStore
+                .CreateHookClientAsync(consumerUserId);
+            clientRecordResult2.ShouldNotBeNull();
+            clientRecordResult2.Success.ShouldBeTrue();
+            var consumerClientRecord = clientRecordResult2.Data;
+
+            for (int i = 0; i < 2; ++i)
+            {
+                var userId = UserIds[i];
+                var producerClient = producerClients[i];
+                for (int iEvent = 0; iEvent < 10; ++iEvent)
+                {
+                    var eventName = eventNames[iEvent];
+
+                    var consumesEventResult = await _restHookClientManagementStore
+                        .AddConsumerHookEventAsync(
+                            userId, producerClient.ClientId, eventName,
+                            consumerUserId, consumerClientRecord.ClientId, Unique.Url);
+
+                    consumesEventResult.ShouldNotBeNull();
+                    consumesEventResult.Success.ShouldBeTrue();
+
+                    var callbackResults = await _restHookClientManagementStore
+                        .FindConsumerHookEventCallbackUrlsAsync(
+                            userId,
+                            producerClient.ClientId, eventName);
+
+                    callbackResults.ShouldNotBeNull();
+                    callbackResults.Success.ShouldBeTrue();
+                    callbackResults.Data.ShouldNotBeNull();
+                    callbackResults.Data.Count().ShouldBe(1);
+                }
+            }
+
+         
+          
+
+            var deepCleanResult =
+                await _restHookClientManagementStore
+                    .DeepCleanHookClientAsync(UserIds[0], producerClients[0].ClientId);
+            deepCleanResult.ShouldNotBeNull();
+            deepCleanResult.Success.ShouldBeTrue();
+
+            var findEventResult =
+                await _restHookClientManagementStore.FindHookEventsAsync(UserIds[0], producerClients[0].ClientId);
+            findEventResult.ShouldNotBeNull();
+            findEventResult.Success.ShouldBeTrue();
+            findEventResult.Data.Count().ShouldBe(0);
+
+            findEventResult =
+                await _restHookClientManagementStore.FindHookEventsAsync(UserIds[1], producerClients[1].ClientId);
+            findEventResult.ShouldNotBeNull();
+            findEventResult.Success.ShouldBeTrue();
+            findEventResult.Data.Count().ShouldBe(10);
+
+            /*
+                        var deleteResult = await _restHookClientManagementStore.DeleteConsumerHookEventAsync(
+                            consumerUserId, consumerClientRecord.ClientId, eventName);
+                        deleteResult.ShouldNotBeNull();
+                        deleteResult.Success.ShouldBeTrue();
+
+                        callbackResults = await _restHookClientManagementStore.FindConsumerHookEventCallbackUrlsAsync(userId,
+                            clientRecord.ClientId, eventName);
+
+                        callbackResults.ShouldNotBeNull();
+                        callbackResults.Success.ShouldBeTrue();
+                        callbackResults.Data.ShouldNotBeNull();
+                        callbackResults.Data.Count().ShouldBe(0);
+            */
+        }
+        [TestMethod]
         public async Task Create_consumes_event_delete()
         {
             var userId = Unique.S;
